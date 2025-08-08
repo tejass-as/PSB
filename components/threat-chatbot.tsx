@@ -211,16 +211,16 @@ export function ThreatChatbot({ threats, onResolveThreat }: ThreatChatbotProps) 
   }
 
   return (
-    <Card className="border-0 shadow-xl bg-white/70 dark:bg-slate-800/70 backdrop-blur-sm h-[74vh] flex flex-col">
+    <Card className="border border-slate-200 dark:border-slate-700 shadow-sm bg-white/95 dark:bg-slate-800/95 backdrop-blur-sm h-[70vh] flex flex-col">
               <CardHeader className="pb-3 border-b border-slate-200 dark:border-slate-700 flex-shrink-0">
         <div className="flex items-center space-x-2">
-          <div className="p-1.5 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg">
+          <div className="p-1.5 bg-slate-800 dark:bg-slate-700 rounded-lg">
             <Bot className="h-4 w-4 text-white" />
           </div>
           <div className="flex-1 min-w-0">
             <CardTitle className="text-base font-semibold flex items-center">
               AI Security Assistant
-              <Badge className="ml-2 bg-green-500 hover:bg-green-600 text-white text-xs">
+              <Badge className="ml-2 bg-slate-700 hover:bg-slate-800 text-white text-xs">
                 <Sparkles className="h-3 w-3 mr-1" />
                 AI Powered
               </Badge>
@@ -274,18 +274,18 @@ export function ThreatChatbot({ threats, onResolveThreat }: ThreatChatbotProps) 
                     <div className={`flex items-start space-x-2 max-w-[85%] ${message.sender === "user" ? "flex-row-reverse space-x-reverse" : ""}`}>
                       <Avatar className="h-7 w-7 flex-shrink-0">
                         <AvatarImage src={message.sender === "bot" ? "/bot-avatar.png" : undefined} />
-                        <AvatarFallback className={message.sender === "bot" ? "bg-gradient-to-r from-blue-500 to-purple-600 text-white" : "bg-slate-200 dark:bg-slate-700"}>
+                        <AvatarFallback className={message.sender === "bot" ? "bg-slate-700 dark:bg-slate-600 text-white" : "bg-slate-200 dark:bg-slate-700"}>
                           {message.sender === "bot" ? <Bot className="h-3 w-3" /> : <User className="h-3 w-3" />}
                         </AvatarFallback>
                       </Avatar>
                       
-                      <div className={`rounded-xl px-3 py-2 ${
-                        message.sender === "user" 
-                          ? "bg-blue-500 text-white" 
-                          : message.type === "solution"
-                            ? "bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-700"
-                            : "bg-slate-100 dark:bg-slate-700"
-                      }`}>
+                                          <div className={`rounded-xl px-3 py-2 ${
+                      message.sender === "user" 
+                        ? "bg-slate-700 dark:bg-slate-600 text-white" 
+                        : message.type === "solution"
+                          ? "bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-600"
+                          : "bg-slate-100 dark:bg-slate-700"
+                    }`}>
                         <div className="whitespace-pre-wrap text-sm leading-relaxed">
                           {message.content}
                         </div>
@@ -311,7 +311,7 @@ export function ThreatChatbot({ threats, onResolveThreat }: ThreatChatbotProps) 
                 >
                   <div className="flex items-start space-x-3">
                     <Avatar className="h-7 w-7 flex-shrink-0">
-                      <AvatarFallback className="bg-gradient-to-r from-blue-500 to-purple-600 text-white">
+                      <AvatarFallback className="bg-slate-700 dark:bg-slate-600 text-white">
                         <Bot className="h-3 w-3" />
                       </AvatarFallback>
                     </Avatar>
@@ -355,7 +355,7 @@ export function ThreatChatbot({ threats, onResolveThreat }: ThreatChatbotProps) 
               <Button
                 onClick={handleSendMessage}
                 disabled={!inputValue.trim() || isTyping}
-                className="bg-blue-500 hover:bg-blue-600 text-white"
+                className="bg-slate-700 hover:bg-slate-800 text-white"
               >
                 <Send className="h-4 w-4" />
               </Button>

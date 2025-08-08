@@ -53,7 +53,7 @@ export function LogTable({ logs }: LogTableProps) {
   }
 
   return (
-    <Card className="border-0 shadow-xl bg-background/50 backdrop-blur-sm">
+    <Card className="border border-slate-200 dark:border-slate-700 shadow-sm bg-white/95 dark:bg-slate-800/95 backdrop-blur-sm">
       <CardHeader className="pb-4">
         <div className="flex items-center justify-between">
           <div>
@@ -81,7 +81,7 @@ export function LogTable({ logs }: LogTableProps) {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -20 }}
                 transition={{ delay: index * 0.05 }}
-                className={`p-4 rounded-lg border transition-all hover:shadow-md ${getSeverityBg(log.severity)}`}
+                className={`p-4 rounded-lg border transition-all hover:shadow-sm ${getSeverityBg(log.severity)}`}
               >
                 <div className="flex items-start justify-between">
                   <div className="flex-1">

@@ -7,10 +7,10 @@ export function LoadingDashboard() {
   const icons = [Shield, Activity, AlertTriangle, Server]
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/20 flex items-center justify-center">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-gray-50 to-slate-100 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 flex items-center justify-center">
       <div className="text-center">
         <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ duration: 0.5 }} className="mb-8">
-          <div className="p-4 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full inline-block">
+          <div className="p-4 bg-slate-800 dark:bg-slate-700 rounded-full inline-block">
             <Shield className="h-12 w-12 text-white" />
           </div>
         </motion.div>
@@ -19,7 +19,7 @@ export function LoadingDashboard() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
-          className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-4"
+          className="text-4xl font-bold text-slate-900 dark:text-slate-100 mb-4"
         >
           SecureWatch AI
         </motion.h1>
@@ -70,7 +70,7 @@ export function LoadingDashboard() {
               initial={{ width: 0 }}
               animate={{ width: "100%" }}
               transition={{ duration: 2, ease: "easeInOut" }}
-              className="h-full bg-gradient-to-r from-blue-500 to-purple-600 rounded-full"
+              className="h-full bg-slate-700 dark:bg-slate-600 rounded-full"
             />
           </div>
         </motion.div>

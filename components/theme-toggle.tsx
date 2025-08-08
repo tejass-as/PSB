@@ -16,7 +16,7 @@ export function ThemeToggle() {
 
   if (!mounted) {
     return (
-      <Button variant="outline" size="sm" className="shadow-lg bg-transparent">
+      <Button variant="outline" size="sm" className="shadow-sm bg-transparent">
         <div className="h-4 w-4" />
       </Button>
     )
@@ -28,7 +28,7 @@ export function ThemeToggle() {
         variant="outline"
         size="sm"
         onClick={() => setTheme(theme === "light" ? "dark" : "light")}
-        className="shadow-lg relative overflow-hidden w-10 h-10 mt-2"
+        className="shadow-sm relative overflow-hidden w-10 h-10 mt-2"
       >
         <motion.div
           initial={false}

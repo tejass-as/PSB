@@ -40,14 +40,14 @@ export function AlertsPanel({ threats, onResolveAll, onResolveThreat }: AlertsPa
   }
 
   return (
-    <Card className="border-0 shadow-xl bg-white/70 dark:bg-slate-800/70 backdrop-blur-sm">
+    <Card className="border border-slate-200 dark:border-slate-700 shadow-sm bg-white/95 dark:bg-slate-800/95 backdrop-blur-sm">
       <CardHeader className="pb-4">
         <div className="flex items-center justify-between">
           <div>
-            <CardTitle className="text-xl font-semibold flex items-center">
-              <AlertTriangle className="h-5 w-5 mr-2 text-red-500" />
-              Threat Alerts
-            </CardTitle>
+                          <CardTitle className="text-xl font-semibold flex items-center">
+                <AlertTriangle className="h-5 w-5 mr-2 text-red-600" />
+                Threat Alerts
+              </CardTitle>
             <CardDescription className="text-slate-600 dark:text-slate-400">
               Active security threats requiring attention
             </CardDescription>
@@ -58,7 +58,7 @@ export function AlertsPanel({ threats, onResolveAll, onResolveThreat }: AlertsPa
                 onClick={onResolveAll}
                 variant="outline"
                 size="sm"
-                className="bg-white/50 dark:bg-slate-700/50 border-slate-200 dark:border-slate-600"
+                className="bg-white/80 dark:bg-slate-700/80 border-slate-200 dark:border-slate-600"
               >
                 <CheckCircle className="h-4 w-4 mr-2" />
                 Resolve All
@@ -100,12 +100,12 @@ export function AlertsPanel({ threats, onResolveAll, onResolveThreat }: AlertsPa
                         <Badge
                           className={`text-xs animate-pulse ${
                             threat.severity === "critical"
-                              ? "bg-red-500 hover:bg-red-600"
-                              : threat.severity === "high"
-                                ? "bg-orange-500 hover:bg-orange-600"
-                                : threat.severity === "medium"
-                                  ? "bg-yellow-500 hover:bg-yellow-600"
-                                  : "bg-blue-500 hover:bg-blue-600"
+                                                        ? "bg-red-600 hover:bg-red-700"
+                          : threat.severity === "high"
+                            ? "bg-orange-600 hover:bg-orange-700"
+                            : threat.severity === "medium"
+                              ? "bg-yellow-600 hover:bg-yellow-700"
+                              : "bg-blue-600 hover:bg-blue-700"
                           } text-white`}
                         >
                           {threat.severity.toUpperCase()}

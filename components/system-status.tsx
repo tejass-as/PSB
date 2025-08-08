@@ -22,37 +22,37 @@ export function SystemStatus({ stats }: SystemStatusProps) {
       status: "operational",
       uptime: "99.9%",
       icon: Database,
-      color: "text-green-500",
+      color: "text-slate-600 dark:text-slate-400",
     },
     {
       name: "Threat Detection",
       status: "operational",
       uptime: "99.8%",
       icon: Shield,
-      color: "text-green-500",
+      color: "text-slate-600 dark:text-slate-400",
     },
     {
       name: "Network Monitor",
       status: "operational",
       uptime: "99.7%",
       icon: Wifi,
-      color: "text-green-500",
+      color: "text-slate-600 dark:text-slate-400",
     },
     {
       name: "Storage System",
       status: "warning",
       uptime: "98.5%",
       icon: HardDrive,
-      color: "text-yellow-500",
+      color: "text-slate-600 dark:text-slate-400",
     },
   ]
 
   const getStatusBadge = (status: string) => {
     switch (status) {
       case "operational":
-        return <Badge className="bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200">Operational</Badge>
+        return <Badge className="bg-slate-100 text-slate-800 dark:bg-slate-700 dark:text-slate-200">Operational</Badge>
       case "warning":
-        return <Badge className="bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200">Warning</Badge>
+        return <Badge className="bg-slate-100 text-slate-800 dark:bg-slate-700 dark:text-slate-200">Warning</Badge>
       case "critical":
         return <Badge variant="destructive">Critical</Badge>
       default:
@@ -62,10 +62,10 @@ export function SystemStatus({ stats }: SystemStatusProps) {
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-      <Card className="border-0 shadow-xl bg-background/50 backdrop-blur-sm">
+      <Card className="border border-slate-200 dark:border-slate-700 shadow-sm bg-white/95 dark:bg-slate-800/95 backdrop-blur-sm">
         <CardHeader>
           <CardTitle className="flex items-center">
-            <Server className="h-5 w-5 mr-2 text-blue-500" />
+            <Server className="h-5 w-5 mr-2 text-slate-600 dark:text-slate-400" />
             System Components
           </CardTitle>
           <CardDescription>Status of core system components</CardDescription>
@@ -94,10 +94,10 @@ export function SystemStatus({ stats }: SystemStatusProps) {
         </CardContent>
       </Card>
 
-      <Card className="border-0 shadow-xl bg-background/50 backdrop-blur-sm">
+      <Card className="border border-slate-200 dark:border-slate-700 shadow-sm bg-white/95 dark:bg-slate-800/95 backdrop-blur-sm">
         <CardHeader>
           <CardTitle className="flex items-center">
-            <Cpu className="h-5 w-5 mr-2 text-purple-500" />
+            <Cpu className="h-5 w-5 mr-2 text-slate-600 dark:text-slate-400" />
             Performance Metrics
           </CardTitle>
           <CardDescription>Real-time system performance data</CardDescription>

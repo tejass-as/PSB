@@ -58,50 +58,50 @@ export function Sidebar({
       title: "Total Logs",
       value: stats.totalLogs.toLocaleString(),
       icon: Activity,
-      color: "text-blue-500",
-      bgColor: "bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900/20 dark:to-blue-800/20",
-      borderColor: "border-blue-200 dark:border-blue-700",
+      color: "text-slate-600 dark:text-slate-400",
+      bgColor: "bg-white/95 dark:bg-slate-800/95",
+      borderColor: "border-slate-200 dark:border-slate-700",
     },
     {
       title: "Active Threats",
       value: threats.length,
       icon: AlertTriangle,
-      color: "text-red-500",
-      bgColor: "bg-gradient-to-br from-red-50 to-red-100 dark:from-red-900/20 dark:to-red-800/20",
-      borderColor: "border-red-200 dark:border-red-700",
+      color: "text-red-600",
+      bgColor: "bg-white/95 dark:bg-slate-800/95",
+      borderColor: "border-slate-200 dark:border-slate-700",
       pulse: threats.length > 0,
     },
     {
       title: "Resolved Threats",
       value: stats.resolvedThreats,
       icon: CheckCircle,
-      color: "text-green-500",
-      bgColor: "bg-gradient-to-br from-green-50 to-green-100 dark:from-green-900/20 dark:to-green-800/20",
-      borderColor: "border-green-200 dark:border-green-700",
+      color: "text-slate-600 dark:text-slate-400",
+      bgColor: "bg-white/95 dark:bg-slate-800/95",
+      borderColor: "border-slate-200 dark:border-slate-700",
     },
     {
       title: "Connections",
       value: stats.activeConnections,
       icon: Users,
-      color: "text-purple-500",
-      bgColor: "bg-gradient-to-br from-purple-50 to-purple-100 dark:from-purple-900/20 dark:to-purple-800/20",
-      borderColor: "border-purple-200 dark:border-purple-700",
+      color: "text-slate-600 dark:text-slate-400",
+      bgColor: "bg-white/95 dark:bg-slate-800/95",
+      borderColor: "border-slate-200 dark:border-slate-700",
     },
     {
       title: "System Health",
       value: `${Math.floor(stats.systemHealth)}%`,
       icon: Server,
-      color: "text-emerald-500",
-      bgColor: "bg-gradient-to-br from-emerald-50 to-emerald-100 dark:from-emerald-900/20 dark:to-emerald-800/20",
-      borderColor: "border-emerald-200 dark:border-emerald-700",
+      color: "text-slate-600 dark:text-slate-400",
+      bgColor: "bg-white/95 dark:bg-slate-800/95",
+      borderColor: "border-slate-200 dark:border-slate-700",
     },
     {
       title: "Avg Response",
       value: `${stats.avgResponseTime.toFixed(1)}s`,
       icon: Clock,
-      color: "text-orange-500",
-      bgColor: "bg-gradient-to-br from-orange-50 to-orange-100 dark:from-orange-900/20 dark:to-orange-800/20",
-      borderColor: "border-orange-200 dark:border-orange-700",
+      color: "text-slate-600 dark:text-slate-400",
+      bgColor: "bg-white/95 dark:bg-slate-800/95",
+      borderColor: "border-slate-200 dark:border-slate-700",
     },
   ]
 
@@ -109,13 +109,13 @@ export function Sidebar({
     <motion.div
       initial={{ x: -300 }}
       animate={{ x: 0 }}
-      className="w-80 h-screen bg-white/90 dark:bg-slate-800/90 backdrop-blur-xl border-r border-slate-200 dark:border-slate-700 shadow-2xl flex flex-col fixed left-0 top-0 z-50 lg:sticky lg:top-0"
+      className="w-80 h-screen bg-white/95 dark:bg-slate-900/95 backdrop-blur-xl border-r border-slate-200 dark:border-slate-700 shadow-sm flex flex-col fixed left-0 top-0 z-50 lg:sticky lg:top-0"
     >
       {/* Header */}
       <div className="p-6 border-b border-slate-200 dark:border-slate-700">
         <div className="flex items-center justify-between mb-4">
           <motion.div whileHover={{ scale: 1.02 }} className="flex items-center space-x-3">
-            <div className="p-2 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl shadow-lg">
+            <div className="p-2 bg-slate-800 dark:bg-slate-700 rounded-xl shadow-sm">
               <Shield className="h-5 w-5 text-white" />
             </div>
             <div>
@@ -149,7 +149,7 @@ export function Sidebar({
               repeat: Number.POSITIVE_INFINITY,
               ease: "easeInOut",
             }}
-            className={`w-2 h-2 rounded-full ${isGenerating ? "bg-green-500" : "bg-slate-400"}`}
+            className={`w-2 h-2 rounded-full ${isGenerating ? "bg-slate-600" : "bg-slate-400"}`}
           />
           <span className="text-sm font-medium text-slate-700 dark:text-slate-300">
             {isGenerating ? "System Active" : "System Idle"}
@@ -172,7 +172,7 @@ export function Sidebar({
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.1 }}
                 whileHover={{ scale: 1.02, y: -2 }}
-                className={`relative overflow-hidden rounded-xl border p-3 transition-all shadow-lg ${stat.bgColor} ${stat.borderColor}`}
+                className={`relative overflow-hidden rounded-xl border p-3 transition-all shadow-sm ${stat.bgColor} ${stat.borderColor}`}
               >
                 {stat.pulse && (
                   <motion.div
@@ -193,7 +193,7 @@ export function Sidebar({
                   <div className="flex items-center justify-between mb-2">
                     <stat.icon className={`h-4 w-4 ${stat.color}`} />
                     {stat.title === "Active Threats" && threats.length > 0 && (
-                      <Badge className="text-xs animate-pulse bg-red-500 hover:bg-red-600 text-white">Alert</Badge>
+                      <Badge className="text-xs animate-pulse bg-red-600 hover:bg-red-700 text-white">Alert</Badge>
                     )}
                   </div>
                   <div className="space-y-1">
@@ -225,7 +225,7 @@ export function Sidebar({
                 <Button
                   onClick={onToggleGeneration}
                   variant={isGenerating ? "destructive" : "default"}
-                  className="w-full justify-start shadow-lg"
+                  className="w-full justify-start shadow-sm"
                   size="sm"
                 >
                   {isGenerating ? (
@@ -246,7 +246,7 @@ export function Sidebar({
                 <Button
                   onClick={onSimulateAttack}
                   variant="outline"
-                  className="w-full justify-start shadow-lg bg-white/50 dark:bg-slate-700/50 border-slate-200 dark:border-slate-600"
+                  className="w-full justify-start shadow-sm bg-white/80 dark:bg-slate-700/80 border-slate-200 dark:border-slate-600"
                   size="sm"
                 >
                   <Zap className="h-4 w-4 mr-2" />
@@ -264,10 +264,10 @@ export function Sidebar({
                   <Button
                     onClick={onResolveThreats}
                     variant="outline"
-                    className="w-full justify-start shadow-lg border-green-200 hover:bg-green-50 dark:border-green-700 dark:hover:bg-green-900/20 bg-white/50 dark:bg-slate-700/50"
+                    className="w-full justify-start shadow-sm border-slate-200 hover:bg-slate-50 dark:border-slate-600 dark:hover:bg-slate-700/20 bg-white/80 dark:bg-slate-700/80"
                     size="sm"
                   >
-                    <CheckCircle className="h-4 w-4 mr-2 text-green-500" />
+                    <CheckCircle className="h-4 w-4 mr-2 text-slate-600 dark:text-slate-400" />
                     Resolve All Threats
                   </Button>
                 </motion.div>
@@ -277,7 +277,7 @@ export function Sidebar({
                 <Button
                   onClick={onExportLogs}
                   variant="outline"
-                  className="w-full justify-start shadow-lg bg-white/50 dark:bg-slate-700/50 border-slate-200 dark:border-slate-600"
+                  className="w-full justify-start shadow-sm bg-white/80 dark:bg-slate-700/80 border-slate-200 dark:border-slate-600"
                   size="sm"
                 >
                   <Download className="h-4 w-4 mr-2" />
@@ -289,10 +289,10 @@ export function Sidebar({
                 <Button
                   onClick={onReset}
                   variant="outline"
-                  className="w-full justify-start shadow-lg border-red-200 hover:bg-red-50 dark:border-red-700 dark:hover:bg-red-900/20 bg-white/50 dark:bg-slate-700/50"
+                  className="w-full justify-start shadow-sm border-slate-200 hover:bg-slate-50 dark:border-slate-600 dark:hover:bg-slate-700/20 bg-white/80 dark:bg-slate-700/80"
                   size="sm"
                 >
-                  <RotateCcw className="h-4 w-4 mr-2 text-red-500" />
+                  <RotateCcw className="h-4 w-4 mr-2 text-slate-600 dark:text-slate-400" />
                   Reset System
                 </Button>
               </motion.div>
