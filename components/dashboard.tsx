@@ -10,6 +10,7 @@ import { Slider } from "@/components/ui/slider"
 import { Sidebar } from "@/components/sidebar"
 import { LogTable } from "@/components/log-table"
 import { AlertsPanel } from "@/components/alerts-panel"
+import { ThreatChatbot } from "@/components/threat-chatbot"
 import { LogChart } from "@/components/log-chart"
 import { SystemStatus } from "@/components/system-status"
 import { VoiceNotification } from "@/components/voice-notification"
@@ -255,11 +256,11 @@ export function Dashboard() {
         </motion.header>
 
         {/* Main Dashboard Content */}
-        <div className="flex-1 p-6">
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}>
-            <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-              <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.3 }}>
-                <TabsList className="grid w-full grid-cols-5 lg:w-[500px] bg-white/70 dark:bg-slate-800/70 backdrop-blur-sm shadow-lg border border-white/20 dark:border-slate-700">
+        <div className="flex-1 p-6 flex flex-col min-h-0">
+                      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="flex-1 flex flex-col min-h-0">
+              <Tabs value={activeTab} onValueChange={setActiveTab} className="flex-1 flex flex-col min-h-0">
+                              <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.3 }} className="flex-shrink-0">
+                  <TabsList className="grid w-full grid-cols-5 lg:w-[500px] bg-white/70 dark:bg-slate-800/70 backdrop-blur-sm shadow-lg border border-white/20 dark:border-slate-700">
                   <TabsTrigger
                     value="logs"
                     className="data-[state=active]:bg-white dark:data-[state=active]:bg-slate-700 data-[state=active]:shadow-md"
@@ -300,13 +301,19 @@ export function Dashboard() {
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -20 }}
                   transition={{ duration: 0.3 }}
+                  className="flex-1 flex flex-col min-h-0"
                 >
                   <TabsContent value="logs" className="space-y-6">
                     <LogTable logs={logs} />
                   </TabsContent>
 
-                  <TabsContent value="threats" className="space-y-6">
-                    <AlertsPanel threats={threats} onResolveAll={resolveAllThreats} onResolveThreat={resolveThreat} />
+                  <TabsContent value="threats" className="flex-1 flex flex-col min-h-0">
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 flex-1 min-h-0">
+                      <AlertsPanel threats={threats} onResolveAll={resolveAllThreats} onResolveThreat={resolveThreat} />
+                      <div className="flex-1 min-h-0">
+                        <ThreatChatbot threats={threats} onResolveThreat={resolveThreat} />
+                      </div>
+                    </div>
                   </TabsContent>
 
                   <TabsContent value="analytics" className="space-y-6">
