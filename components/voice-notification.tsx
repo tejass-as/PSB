@@ -41,6 +41,7 @@ export function VoiceNotification({ threats, settings }: VoiceNotificationProps)
       const message = `Security Alert: ${threat.type} detected from IP ${threat.ip}. Severity level: ${threat.severity}. ${threat.description}`
 
       const utterance = new SpeechSynthesisUtterance(message)
+      utterance.lang = "en-US";
       utterance.rate = 0.9
       utterance.pitch = 1.1
       utterance.volume = settings.voiceVolume / 100
