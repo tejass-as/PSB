@@ -33,6 +33,10 @@ import {
   AlertCircle,
   AlertTriangle,
   RotateCcw,
+  Activity,
+  BarChart3,
+  Eye,
+  Cpu,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -311,32 +315,37 @@ export function Dashboard() {
                 <TabsList className="grid w-full grid-cols-5 lg:w-[500px] bg-white/90 dark:bg-slate-800/90 backdrop-blur-sm shadow-sm border border-slate-200 dark:border-slate-700">
                   <TabsTrigger
                     value="logs"
-                    className="data-[state=active]:bg-white dark:data-[state=active]:bg-slate-700 data-[state=active]:shadow-sm"
+                    className="data-[state=active]:bg-white dark:data-[state=active]:bg-slate-700 data-[state=active]:shadow-sm flex items-center gap-2"
                   >
+                    <Activity className="h-4 w-4" />
                     Logs
                   </TabsTrigger>
                   <TabsTrigger
                     value="threats"
-                    className="data-[state=active]:bg-white dark:data-[state=active]:bg-slate-700 data-[state=active]:shadow-sm"
+                    className="data-[state=active]:bg-white dark:data-[state=active]:bg-slate-700 data-[state=active]:shadow-sm flex items-center gap-2"
                   >
+                    <AlertTriangle className="h-4 w-4" />
                     Threats
                   </TabsTrigger>
                   <TabsTrigger
                     value="analytics"
-                    className="data-[state=active]:bg-white dark:data-[state=active]:bg-slate-700 data-[state=active]:shadow-sm"
+                    className="data-[state=active]:bg-white dark:data-[state=active]:bg-slate-700 data-[state=active]:shadow-sm flex items-center gap-2"
                   >
+                    <BarChart3 className="h-4 w-4" />
                     Analytics
                   </TabsTrigger>
                   <TabsTrigger
                     value="system"
-                    className="data-[state=active]:bg-white dark:data-[state=active]:bg-slate-700 data-[state=active]:shadow-sm"
+                    className="data-[state=active]:bg-white dark:data-[state=active]:bg-slate-700 data-[state=active]:shadow-sm flex items-center gap-2"
                   >
+                    <Cpu className="h-4 w-4" />
                     System
                   </TabsTrigger>
                   <TabsTrigger
                     value="settings"
-                    className="data-[state=active]:bg-white dark:data-[state=active]:bg-slate-700 data-[state=active]:shadow-sm"
+                    className="data-[state=active]:bg-white dark:data-[state=active]:bg-slate-700 data-[state=active]:shadow-sm flex items-center gap-2"
                   >
+                    <Settings className="h-4 w-4" />
                     Settings
                   </TabsTrigger>
                 </TabsList>
@@ -384,7 +393,9 @@ export function Dashboard() {
                       <Card className="border border-slate-200 dark:border-slate-700 shadow-sm bg-white/95 dark:bg-slate-800/95 backdrop-blur-sm">
                         <CardContent className="p-6">
                           <div className="flex items-center space-x-2 mb-6">
-                            <Settings className="h-5 w-5 text-slate-600 dark:text-slate-400" />
+                            <div className="p-2 bg-slate-800 dark:bg-slate-700 rounded-lg">
+                              <Settings className="h-5 w-5 text-white" />
+                            </div>
                             <h3 className="text-lg font-semibold text-slate-800 dark:text-slate-200">
                               System Controls
                             </h3>
@@ -465,7 +476,9 @@ export function Dashboard() {
                       <Card className="border border-slate-200 dark:border-slate-700 shadow-sm bg-white/95 dark:bg-slate-800/95 backdrop-blur-sm">
                         <CardContent className="p-6">
                           <div className="flex items-center space-x-2 mb-6">
-                            <Bell className="h-5 w-5 text-slate-600 dark:text-slate-400" />
+                            <div className="p-2 bg-slate-800 dark:bg-slate-700 rounded-lg">
+                              <Bell className="h-5 w-5 text-white" />
+                            </div>
                             <h3 className="text-lg font-semibold text-slate-800 dark:text-slate-200">
                               Notification Settings
                             </h3>

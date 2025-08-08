@@ -107,7 +107,7 @@ export function LogTable({ logs }: LogTableProps) {
   }, {} as Record<string, number>)
 
   return (
-    <Card className="h-screen border border-slate-200 dark:border-slate-700 shadow-sm bg-white/95 dark:bg-slate-800/95 backdrop-blur-sm">
+    <Card className="h-full border border-slate-200 dark:border-slate-700 shadow-sm bg-white/95 dark:bg-slate-800/95 backdrop-blur-sm">
       <CardHeader className="pb-4">
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
           <div>
