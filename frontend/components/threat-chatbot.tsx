@@ -5,9 +5,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
-
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Bot, Send, User, Sparkles, Shield, AlertTriangle, MessageCircle, RotateCcw } from "lucide-react"
+import { Bot, Send, User, Sparkles, Shield, AlertTriangle, MessageCircle, RotateCcw, Zap, Brain, Target, Clock } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
 import type { ThreatAlert } from "@/lib/log-simulator"
 
@@ -16,7 +15,7 @@ interface ChatMessage {
   content: string
   sender: "user" | "bot"
   timestamp: Date
-  type?: "solution" | "info" | "question"
+  type?: "solution" | "info" | "question" | "warning" | "success"
 }
 
 interface ThreatChatbotProps {
@@ -55,7 +54,7 @@ export function ThreatChatbot({ threats, onResolveThreat }: ThreatChatbotProps) 
         content: `🚨 New threat detected: "${newThreat.type}" with ${newThreat.severity} severity.\n\nI can help you:\n• Understand this threat\n• Provide resolution steps\n• Suggest preventive measures\n\nWhat would you like to know about this threat?`,
         sender: "bot",
         timestamp: new Date(),
-        type: "solution"
+        type: "warning"
       }
       setMessages(prev => [...prev, suggestionMessage])
     }
@@ -192,10 +191,10 @@ export function ThreatChatbot({ threats, onResolveThreat }: ThreatChatbotProps) 
   const getQuickActions = () => {
     if (threats.length === 0) {
       return [
-        { label: "What can you help me with?", action: "help" },
-        { label: "Explain security concepts", action: "explain security" },
-        { label: "Best practices", action: "best practices" },
-        { label: "Threat severity levels", action: "explain severity levels" }
+        { label: "What can you help me with?", action: "help", icon: <Brain className="h-3 w-3" /> },
+        { label: "Explain security concepts", action: "explain security", icon: <Shield className="h-3 w-3" /> },
+        { label: "Best practices", action: "best practices", icon: <Target className="h-3 w-3" /> },
+        { label: "Threat severity levels", action: "explain severity levels", icon: <AlertTriangle className="h-3 w-3" /> }
       ]
     }
 
@@ -203,161 +202,193 @@ export function ThreatChatbot({ threats, onResolveThreat }: ThreatChatbotProps) 
     const threatType = currentThreat.type.toLowerCase()
     
     return [
-      { label: `Current threat: ${currentThreat.type}`, action: "tell me about the current threat" },
-      { label: `Help with ${currentThreat.type}`, action: `help with ${threatType}` },
-      { label: "How to resolve", action: "how to resolve this threat" },
-      { label: "Security best practices", action: "best practices" }
+      { label: `Current threat: ${currentThreat.type}`, action: "tell me about the current threat", icon: <AlertTriangle className="h-3 w-3" /> },
+      { label: `Help with ${currentThreat.type}`, action: `help with ${threatType}`, icon: <Shield className="h-3 w-3" /> },
+      { label: "How to resolve", action: "how to resolve this threat", icon: <Zap className="h-3 w-3" /> },
+      { label: "Security best practices", action: "best practices", icon: <Target className="h-3 w-3" /> }
     ]
+  }
+
+  const getMessageStyle = (message: ChatMessage) => {
+    switch (message.type) {
+      case "solution":
+        return "bg-gradient-to-r from-emerald-50 to-green-50 dark:from-emerald-950/30 dark:to-green-950/30 border border-emerald-200 dark:border-emerald-700"
+      case "warning":
+        return "bg-gradient-to-r from-amber-50 to-orange-50 dark:from-amber-950/30 dark:to-orange-950/30 border border-amber-200 dark:border-amber-700"
+      case "success":
+        return "bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-950/30 dark:to-indigo-950/30 border border-blue-200 dark:border-blue-700"
+      default:
+        return "bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-600"
+    }
   }
 
   return (
     <Card className="border border-slate-200 dark:border-slate-700 shadow-sm bg-white/95 dark:bg-slate-800/95 backdrop-blur-sm h-[70vh] flex flex-col">
-              <CardHeader className="pb-3 border-b border-slate-200 dark:border-slate-700 flex-shrink-0">
-        <div className="flex items-center space-x-2">
-          <div className="p-1.5 bg-slate-800 dark:bg-slate-700 rounded-lg">
-            <Bot className="h-4 w-4 text-white" />
-          </div>
-          <div className="flex-1 min-w-0">
-            <CardTitle className="text-base font-semibold flex items-center">
-              AI Security Assistant
-              <Badge className="ml-2 bg-slate-700 hover:bg-slate-800 text-white text-xs">
-                <Sparkles className="h-3 w-3 mr-1" />
-                AI Powered
-              </Badge>
-            </CardTitle>
-            <p className="text-xs text-slate-600 dark:text-slate-400 truncate">
-              Get instant help with security threats and solutions
-            </p>
+      <CardHeader className="pb-3 border-b border-slate-200 dark:border-slate-700 flex-shrink-0 bg-gradient-to-r from-slate-50 to-slate-100 dark:from-slate-800 dark:to-slate-700">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center space-x-3">
+            <div className="p-2 bg-gradient-to-r from-slate-800 to-slate-700 dark:from-slate-600 dark:to-slate-500 rounded-xl shadow-sm">
+              <Bot className="h-5 w-5 text-white" />
+            </div>
+            <div className="flex-1 min-w-0">
+              <CardTitle className="text-lg font-semibold flex items-center gap-2">
+                AI Security Assistant
+                <Badge className="bg-gradient-to-r from-slate-700 to-slate-600 hover:from-slate-800 hover:to-slate-700 text-white text-xs border-0">
+                  <Sparkles className="h-3 w-3 mr-1" />
+                  AI Powered
+                </Badge>
+              </CardTitle>
+              <p className="text-sm text-slate-600 dark:text-slate-400">
+                Get instant help with security threats and solutions
+              </p>
+            </div>
           </div>
           <motion.button
-            whileHover={{ scale: 1.05 }}
+            whileHover={{ scale: 1.05, rotate: 180 }}
             whileTap={{ scale: 0.95 }}
             onClick={clearChat}
-            className="p-1.5 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-lg transition-colors flex-shrink-0"
+            className="p-2 hover:bg-slate-200 dark:hover:bg-slate-600 rounded-xl transition-all duration-200 flex-shrink-0 group"
             title="Clear chat"
           >
-            <RotateCcw className="h-3 w-3 text-slate-500" />
+            <RotateCcw className="h-4 w-4 text-slate-500 group-hover:text-slate-700 dark:group-hover:text-slate-300 transition-colors" />
           </motion.button>
         </div>
       </CardHeader>
 
       <CardContent className="flex-1 flex flex-col p-0 min-h-0">
         {/* Quick Actions */}
-        <div className="p-3 border-b border-slate-200 dark:border-slate-700 flex-shrink-0">
-          <div className="flex flex-wrap gap-1.5">
+        <div className="p-4 border-b border-slate-200 dark:border-slate-700 flex-shrink-0 bg-gradient-to-r from-slate-50/50 to-slate-100/50 dark:from-slate-800/50 dark:to-slate-700/50">
+          <div className="flex flex-wrap gap-2">
             {getQuickActions().map((action, index) => (
               <motion.button
                 key={index}
-                whileHover={{ scale: 1.05 }}
+                whileHover={{ scale: 1.05, y: -2 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={() => setInputValue(action.action)}
-                className="px-2 py-1 text-xs bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 rounded-full transition-colors"
+                className="px-3 py-2 text-sm bg-white dark:bg-slate-700 hover:bg-slate-100 dark:hover:bg-slate-600 rounded-xl transition-all duration-200 shadow-sm border border-slate-200 dark:border-slate-600 flex items-center gap-2 group"
               >
-                {action.label}
+                <span className="text-slate-500 group-hover:text-slate-700 dark:group-hover:text-slate-300 transition-colors">
+                  {action.icon}
+                </span>
+                <span className="font-medium text-slate-700 dark:text-slate-300">
+                  {action.label}
+                </span>
               </motion.button>
             ))}
           </div>
         </div>
 
         {/* Chat Messages */}
-        <div className="flex-1 min-h-0 overflow-y-auto scrollbar-hide p-3" ref={chatContainerRef}>
-          <div className="space-y-3">
-              <AnimatePresence>
-                {messages.map((message) => (
-                  <motion.div
-                    key={message.id}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -20 }}
-                    className={`flex ${message.sender === "user" ? "justify-end" : "justify-start"}`}
-                  >
-                    <div className={`flex items-start space-x-2 max-w-[85%] ${message.sender === "user" ? "flex-row-reverse space-x-reverse" : ""}`}>
-                      <Avatar className="h-7 w-7 flex-shrink-0">
-                        <AvatarImage src={message.sender === "bot" ? "/bot-avatar.png" : undefined} />
-                        <AvatarFallback className={message.sender === "bot" ? "bg-slate-700 dark:bg-slate-600 text-white" : "bg-slate-200 dark:bg-slate-700"}>
-                          {message.sender === "bot" ? <Bot className="h-3 w-3" /> : <User className="h-3 w-3" />}
-                        </AvatarFallback>
-                      </Avatar>
-                      
-                                          <div className={`rounded-xl px-3 py-2 ${
-                      message.sender === "user" 
-                        ? "bg-slate-700 dark:bg-slate-600 text-white" 
-                        : message.type === "solution"
-                          ? "bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-600"
-                          : "bg-slate-100 dark:bg-slate-700"
-                    }`}>
-                        <div className="whitespace-pre-wrap text-sm leading-relaxed">
-                          {message.content}
-                        </div>
-                        <div className={`text-xs mt-1.5 ${
-                          message.sender === "user" 
-                            ? "text-blue-100" 
-                            : "text-slate-500 dark:text-slate-400"
-                        }`}>
-                          {message.timestamp.toLocaleTimeString()}
-                        </div>
-                      </div>
-                    </div>
-                  </motion.div>
-                ))}
-              </AnimatePresence>
-
-              {/* Typing Indicator */}
-              {isTyping && (
+        <div className="flex-1 min-h-0 overflow-y-auto scrollbar-hide p-4" ref={chatContainerRef}>
+          <div className="space-y-4">
+            <AnimatePresence>
+              {messages.map((message) => (
                 <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className="flex justify-start"
+                  key={message.id}
+                  initial={{ opacity: 0, y: 20, scale: 0.95 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  exit={{ opacity: 0, y: -20, scale: 0.95 }}
+                  transition={{ duration: 0.3, ease: "easeOut" }}
+                  className={`flex ${message.sender === "user" ? "justify-end" : "justify-start"}`}
                 >
-                  <div className="flex items-start space-x-3">
-                    <Avatar className="h-7 w-7 flex-shrink-0">
-                      <AvatarFallback className="bg-slate-700 dark:bg-slate-600 text-white">
-                        <Bot className="h-3 w-3" />
+                  <div className={`flex items-start space-x-3 max-w-[85%] ${message.sender === "user" ? "flex-row-reverse space-x-reverse" : ""}`}>
+                    <Avatar className="h-8 w-8 flex-shrink-0 shadow-sm border-2 border-white dark:border-slate-700">
+                      <AvatarImage src={message.sender === "bot" ? "/bot-avatar.png" : undefined} />
+                      <AvatarFallback className={message.sender === "bot" ? "bg-gradient-to-r from-slate-700 to-slate-600 text-white" : "bg-gradient-to-r from-blue-500 to-blue-600 text-white"}>
+                        {message.sender === "bot" ? <Bot className="h-4 w-4" /> : <User className="h-4 w-4" />}
                       </AvatarFallback>
                     </Avatar>
-                    <div className="bg-slate-100 dark:bg-slate-700 rounded-xl px-3 py-2">
-                      <div className="flex space-x-1">
-                        <motion.div
-                          animate={{ scale: [1, 1.2, 1] }}
-                          transition={{ duration: 0.6, repeat: Infinity, delay: 0 }}
-                          className="w-1.5 h-1.5 bg-slate-400 rounded-full"
-                        />
-                        <motion.div
-                          animate={{ scale: [1, 1.2, 1] }}
-                          transition={{ duration: 0.6, repeat: Infinity, delay: 0.2 }}
-                          className="w-1.5 h-1.5 bg-slate-400 rounded-full"
-                        />
-                        <motion.div
-                          animate={{ scale: [1, 1.2, 1] }}
-                          transition={{ duration: 0.6, repeat: Infinity, delay: 0.4 }}
-                          className="w-1.5 h-1.5 bg-slate-400 rounded-full"
-                        />
+                    
+                    <div className={`rounded-2xl px-4 py-3 shadow-sm ${
+                      message.sender === "user" 
+                        ? "bg-gradient-to-r from-slate-700 to-slate-600 text-white" 
+                        : getMessageStyle(message)
+                    }`}>
+                      <div className="whitespace-pre-wrap text-sm leading-relaxed font-medium">
+                        {message.content}
+                      </div>
+                      <div className={`flex items-center gap-1 mt-2 text-xs ${
+                        message.sender === "user" 
+                          ? "text-blue-100" 
+                          : "text-slate-500 dark:text-slate-400"
+                      }`}>
+                        <Clock className="h-3 w-3" />
+                        {message.timestamp.toLocaleTimeString()}
                       </div>
                     </div>
                   </div>
                 </motion.div>
-              )}
-                         </div>
-           </div>
+              ))}
+            </AnimatePresence>
+
+            {/* Typing Indicator */}
+            {isTyping && (
+              <motion.div
+                initial={{ opacity: 0, y: 20, scale: 0.95 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                className="flex justify-start"
+              >
+                <div className="flex items-start space-x-3">
+                  <Avatar className="h-8 w-8 flex-shrink-0 shadow-sm border-2 border-white dark:border-slate-700">
+                    <AvatarFallback className="bg-gradient-to-r from-slate-700 to-slate-600 text-white">
+                      <Bot className="h-4 w-4" />
+                    </AvatarFallback>
+                  </Avatar>
+                  <div className="bg-gradient-to-r from-slate-50 to-slate-100 dark:from-slate-800 dark:to-slate-700 rounded-2xl px-4 py-3 shadow-sm border border-slate-200 dark:border-slate-600">
+                    <div className="flex space-x-1">
+                      <motion.div
+                        animate={{ scale: [1, 1.2, 1], opacity: [0.5, 1, 0.5] }}
+                        transition={{ duration: 0.8, repeat: Infinity, delay: 0 }}
+                        className="w-2 h-2 bg-slate-400 rounded-full"
+                      />
+                      <motion.div
+                        animate={{ scale: [1, 1.2, 1], opacity: [0.5, 1, 0.5] }}
+                        transition={{ duration: 0.8, repeat: Infinity, delay: 0.2 }}
+                        className="w-2 h-2 bg-slate-400 rounded-full"
+                      />
+                      <motion.div
+                        animate={{ scale: [1, 1.2, 1], opacity: [0.5, 1, 0.5] }}
+                        transition={{ duration: 0.8, repeat: Infinity, delay: 0.4 }}
+                        className="w-2 h-2 bg-slate-400 rounded-full"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </motion.div>
+            )}
+          </div>
+        </div>
 
         {/* Input Area */}
-        <div className="p-3 border-t border-slate-200 dark:border-slate-700 flex-shrink-0">
-          <div className="flex space-x-2">
-            <Input
-              value={inputValue}
-              onChange={(e) => setInputValue(e.target.value)}
-              onKeyPress={handleKeyPress}
-              placeholder="Ask me about security threats, solutions, or best practices..."
-              className="flex-1"
-              disabled={isTyping}
-            />
+        <div className="p-4 border-t border-slate-200 dark:border-slate-700 flex-shrink-0 bg-gradient-to-r from-slate-50/50 to-slate-100/50 dark:from-slate-800/50 dark:to-slate-700/50">
+          <div className="flex space-x-3">
+            <div className="relative flex-1">
+              <Input
+                value={inputValue}
+                onChange={(e) => setInputValue(e.target.value)}
+                onKeyPress={handleKeyPress}
+                placeholder="Ask me about security threats, solutions, or best practices..."
+                className="pr-12 h-12 rounded-xl border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 shadow-sm focus:ring-2 focus:ring-slate-500 focus:border-transparent"
+                disabled={isTyping}
+              />
+              {isTyping && (
+                <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
+                  <motion.div
+                    animate={{ rotate: 360 }}
+                    transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+                    className="w-5 h-5 border-2 border-slate-300 border-t-slate-600 rounded-full"
+                  />
+                </div>
+              )}
+            </div>
             <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
               <Button
                 onClick={handleSendMessage}
                 disabled={!inputValue.trim() || isTyping}
-                className="bg-slate-700 hover:bg-slate-800 text-white"
+                className="h-12 px-6 bg-gradient-to-r from-slate-700 to-slate-600 hover:from-slate-800 hover:to-slate-700 text-white rounded-xl shadow-sm border-0 font-medium"
               >
-                <Send className="h-4 w-4" />
+                <Send className="h-4 w-4 mr-2" />
+                Send
               </Button>
             </motion.div>
           </div>
