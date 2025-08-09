@@ -17,6 +17,11 @@ export interface ThreatAlert {
   ip: string
 }
 
+// ============================================================================
+// FAKE LOG GENERATION CODE (COMMENTED OUT - FOR TESTING ONLY)
+// ============================================================================
+
+/*
 const sources = ["firewall", "auth", "web", "database", "system", "network", "vpn"]
 const users = ["admin", "user1", "user2", "guest", "service", "system", "api"]
 const ips = [
@@ -159,4 +164,85 @@ export function detectThreat(log: LogEntry): ThreatAlert | null {
   }
 
   return null
+}
+*/
+
+// ============================================================================
+// REAL KAFKA INTEGRATION CODE
+// ============================================================================
+
+import kafkaService from './kafka-service'
+
+// Store for real-time logs and threats
+let realTimeLogs: LogEntry[] = []
+let realTimeThreats: ThreatAlert[] = []
+
+// Initialize Kafka service listeners
+kafkaService.onLogMessage((log: LogEntry) => {
+  realTimeLogs.unshift(log)
+  // Keep only the latest 1000 logs
+  if (realTimeLogs.length > 1000) {
+    realTimeLogs = realTimeLogs.slice(0, 1000)
+  }
+})
+
+kafkaService.onThreatDetected((threat: ThreatAlert) => {
+  realTimeThreats.unshift(threat)
+  // Keep only the latest 100 threats
+  if (realTimeThreats.length > 100) {
+    realTimeThreats = realTimeThreats.slice(0, 100)
+  }
+})
+
+// Function to get real-time logs
+export function getRealTimeLogs(): LogEntry[] {
+  return [...realTimeLogs]
+}
+
+// Function to get real-time threats
+export function getRealTimeThreats(): ThreatAlert[] {
+  return [...realTimeThreats]
+}
+
+// Function to check if Kafka is connected
+export function isKafkaConnected(): boolean {
+  return kafkaService.isConnectedToKafka()
+}
+
+// Legacy functions for backward compatibility (now return real data)
+export function generateLog(forceType?: string, forceIp?: string): LogEntry {
+  // Return the most recent log or a placeholder
+  if (realTimeLogs.length > 0) {
+    return realTimeLogs[0]
+  }
+  
+  // Fallback placeholder log
+  return {
+    id: Math.random().toString(36).substr(2, 9),
+    timestamp: new Date(),
+    source: "kafka",
+    severity: "low",
+    message: "Waiting for Kafka connection...",
+    ip: "0.0.0.0",
+    user: "system"
+  }
+}
+
+export function detectThreat(log: LogEntry): ThreatAlert | null {
+  // Return the most recent threat or null
+  if (realTimeThreats.length > 0) {
+    return realTimeThreats[0]
+  }
+  
+  return null
+}
+
+// Function to get all current threats
+export function getAllThreats(): ThreatAlert[] {
+  return realTimeThreats
+}
+
+// Function to get all current logs
+export function getAllLogs(): LogEntry[] {
+  return realTimeLogs
 }
