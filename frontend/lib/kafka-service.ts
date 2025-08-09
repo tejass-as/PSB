@@ -165,7 +165,7 @@ interface KafkaLogData {
         if (score >= 1.3) {
           return "critical";
         }
-        if (score >= 0.9) {
+        if (score >= 0.75) {
           return "high";
         }
         if (score >= 0.6) {
@@ -187,7 +187,7 @@ interface KafkaLogData {
         "exploit",
         "ransomware",
       ]
-      const isHighSeverity = log.severity === "high" || log.severity === "critical" || log.severity === "medium"
+      const isHighSeverity = log.severity === "high" || log.severity === "critical"
       const containsThreatKeyword = threatKeywords.some(keyword => log.message.toLowerCase().includes(keyword))
   
       if (isHighSeverity) {

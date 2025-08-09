@@ -10,6 +10,7 @@ import { Slider } from "@/components/ui/slider";
 import { Sidebar } from "@/components/sidebar";
 import { LogTable } from "@/components/log-table";
 import { AlertsPanel } from "@/components/alerts-panel";
+import UploadFile from "@/components/upload";
 import { ThreatChatbot } from "@/components/threat-chatbot";
 import { LogChart } from "@/components/log-chart";
 import { SystemStatus } from "@/components/system-status";
@@ -42,6 +43,7 @@ import {
   Cpu,
   Wifi,
   WifiOff,
+  Upload,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -68,6 +70,7 @@ export function Dashboard() {
     resolvedThreats: 0,
     avgResponseTime: 0.8,
   });
+  const [resolvedThreatIds, setResolvedThreatIds] = useState<string[]>([]);
 
   // Real-time Kafka data polling
   useEffect(() => {
@@ -179,19 +182,22 @@ export function Dashboard() {
     });
   };
 
-  const resolveAllThreats = () => {
-    setStats((prev) => ({
-      ...prev,
-      resolvedThreats: prev.resolvedThreats + threats.length,
-    }));
-    setThreats([]);
-  };
-
   const resolveThreat = (threatId: string) => {
-    setThreats((prev) => prev.filter((threat) => threat.id !== threatId));
+    setResolvedThreatIds((prev) => [...prev, threatId]);
     setStats((prev) => ({
       ...prev,
       resolvedThreats: prev.resolvedThreats + 1,
+    }));
+  };
+
+  const resolveAllThreats = () => {
+    setResolvedThreatIds((prev) => [
+      ...prev,
+      ...threats.map((threat) => threat.id),
+    ]);
+    setStats((prev) => ({
+      ...prev,
+      resolvedThreats: prev.resolvedThreats + threats.length,
     }));
   };
 
@@ -380,7 +386,7 @@ export function Dashboard() {
                 transition={{ delay: 0.3 }}
                 className="flex-shrink-0"
               >
-                <TabsList className="grid w-full grid-cols-5 lg:w-[500px] bg-white/90 dark:bg-slate-800/90 backdrop-blur-sm shadow-sm border border-slate-200 dark:border-slate-700">
+                <TabsList className="grid w-full grid-cols-6 lg:w-[600px] bg-white/90 dark:bg-slate-800/90 backdrop-blur-sm shadow-sm border border-slate-200 dark:border-slate-700">
                   <TabsTrigger
                     value="logs"
                     className="data-[state=active]:bg-white dark:data-[state=active]:bg-slate-700 data-[state=active]:shadow-sm flex items-center gap-2"
@@ -401,6 +407,13 @@ export function Dashboard() {
                   >
                     <BarChart3 className="h-4 w-4" />
                     Analytics
+                  </TabsTrigger>
+                  <TabsTrigger
+                    value="upload"
+                    className="data-[state=active]:bg-white dark:data-[state=active]:bg-slate-700 data-[state=active]:shadow-sm flex items-center gap-2"
+                  >
+                    <Upload className="h-4 w-4" />
+                    Upload
                   </TabsTrigger>
                   <TabsTrigger
                     value="system"
@@ -449,6 +462,10 @@ export function Dashboard() {
 
                   <TabsContent value="analytics" className="space-y-6">
                     <LogChart logs={logs} stats={stats} />
+                  </TabsContent>
+
+                  <TabsContent value="upload" className="space-y-6">
+                    <UploadFile />
                   </TabsContent>
 
                   <TabsContent value="system" className="space-y-6">
