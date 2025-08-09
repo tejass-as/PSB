@@ -58,16 +58,17 @@ export class KafkaService {
       this.ws.onmessage = (event) => {
         try {
           const kafkaData: KafkaLogData = JSON.parse(event.data)
-          const logEntry = this.convertKafkaDataToLogEntry(kafkaData)
+          console.log('Received Kafka message:', kafkaData)
+          //const logEntry = this.convertKafkaDataToLogEntry(kafkaData)
           
-          // Notify all message handlers
-          this.messageHandlers.forEach(handler => handler(logEntry))
+          //// Notify all message handlers
+          //this.messageHandlers.forEach(handler => handler(logEntry))
           
-          // Check for threats
-          const threat = this.detectThreat(logEntry)
-          if (threat) {
-            this.threatHandlers.forEach(handler => handler(threat))
-          }
+          //// Check for threats
+          //const threat = this.detectThreat(logEntry)
+          //if (threat) {
+          //  this.threatHandlers.forEach(handler => handler(threat))
+          //}
         } catch (error) {
           console.error('Error parsing Kafka message:', error)
         }
