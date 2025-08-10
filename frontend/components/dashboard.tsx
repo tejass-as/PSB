@@ -454,6 +454,7 @@ export function Dashboard() {
                   <TabsContent value="threats" className="h-full">
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 h-full">
                       <AlertsPanel
+                        logs={logs}
                         threats={threats}
                         onResolveAll={resolveAllThreats}
                         onResolveThreat={resolveThreat}
@@ -730,6 +731,7 @@ export function Dashboard() {
 }
 
 interface AlertsPanelProps {
+  logs: LogEntry[]
   threats: ThreatAlert[]
   onResolveAll: () => void
   onResolveThreat: (threatId: string) => void

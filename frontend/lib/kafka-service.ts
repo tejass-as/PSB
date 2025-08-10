@@ -60,6 +60,7 @@ interface KafkaLogData {
     description: string
     ip: string
     explanation: string
+    source: string
   }
   
   export class KafkaService {
@@ -167,7 +168,7 @@ interface KafkaLogData {
     private determineSeverity(kafkaData: KafkaLogData): "low" | "medium" | "high" | "critical" {
         const score = kafkaData.data?.anomaly_score ?? 0;
       
-        if (score >= 1.7) {
+        if (score >= 1.5) {
           return "critical";
         }
         if (score >= 0.75) {
@@ -214,9 +215,10 @@ interface KafkaLogData {
           timestamp: new Date(),
           type: threatTypes[detectedKeyword],
           severity: log.severity,
-          description: `Detected ${threatTypes[detectedKeyword].toLowerCase()} from ${log.source} system targeting ${log.user}`,
+          description: `Detected ${log.message}`,
           ip: log.ip,
           explanation: log.explanation,
+          source: log.source,
         }
       }
   

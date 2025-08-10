@@ -3,7 +3,7 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import type { ThreatAlert } from "@/lib/log-simulator"
+import type { LogEntry, ThreatAlert } from "@/lib/log-simulator"
 import { AlertTriangle, Shield, CheckCircle, Clock } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
 
@@ -12,9 +12,10 @@ interface AlertsPanelProps {
   onResolveAll: () => void
   onResolveThreat: (threatId: string) => void
   onThreatClick: (threat: ThreatAlert) => void
+  logs: LogEntry[]
 }
 
-export function AlertsPanel({ threats, onResolveAll, onResolveThreat, onThreatClick }: AlertsPanelProps) {
+export function AlertsPanel({ threats, onResolveAll, onResolveThreat, onThreatClick, logs }: AlertsPanelProps) {
   const getSeverityIcon = (severity: string) => {
     switch (severity) {
       case "critical":
@@ -98,7 +99,7 @@ export function AlertsPanel({ threats, onResolveAll, onResolveThreat, onThreatCl
                     </motion.div>
                     <div className="flex-1">
                       <div className="flex items-center justify-between mb-2">
-                        <h3 className="font-semibold text-sm text-slate-800 dark:text-slate-200">{threat.type}</h3>
+                        <h3 className="font-semibold text-sm text-slate-800 dark:text-slate-200">{threat.source}</h3>
                         <Badge
                           className={`text-xs animate-pulse ${
                             threat.severity === "critical"

@@ -17,6 +17,7 @@ export interface ThreatAlert {
   description: string
   ip: string
   explanation: string
+  source: string
 }
 
 // ============================================================================
@@ -226,7 +227,7 @@ export function generateLog(forceType?: string, forceIp?: string): LogEntry {
     severity: "low",
     message: "Waiting for Kafka connection...",
     ip: "0.0.0.0",
-    user: "system"
+    user: "system",
   }
 }
 
