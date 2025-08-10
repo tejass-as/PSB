@@ -15,35 +15,30 @@ from pydantic import BaseModel
 from tensorflow.keras.models import Model
 from tensorflow.keras.layers import Input, Dense
 from fastapi.middleware.cors import CORSMiddleware
-from motor.motor_asyncio import AsyncIOMotorClient
-import os
-import json
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-MONGODB_URI = "mongodb+srv://Shravan:Shravan_2004@cluster0.1gdhi.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
-MONGODB_DB = "mydb"
-MONGODB_COLLECTION = "malicious_user_logs"
-
-
-mongo_client = AsyncIOMotorClient(MONGODB_URI)
-db = mongo_client[MONGODB_DB]
-collection = db[MONGODB_COLLECTION]
-origins = [
-    "https://localhost:3000",
-    "https://127.0.0.1:3000",  # optionally add this if your frontend uses 127.0.0.1
-]
 app = FastAPI(title="Malicious User Detection API", version="1.0.0")
+
+# Allow CORS from specific URLs
+origins = [
+    "http://localhost:3000",
+    "http://127.0.0.1:3000",
+    "http://localhost:5173",
+    "http://127.0.0.1:5173",
+    # Add more frontend URLs as needed
+]
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,  # allow only your frontend origin(s)
+    allow_origins=origins,
     allow_credentials=True,
-    allow_methods=["*"],  # allow all HTTP methods (GET, POST, etc.)
-    allow_headers=["*"],  # allow all headers
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
+
 # ======== Pydantic Response Models ========
 
 class PredictionResponse(BaseModel):
@@ -468,25 +463,6 @@ async def predict_autoencoder(file: UploadFile = File(...)):
     anomalies = autoencoder_detector.train_and_predict(df)
     return {"top_anomalous_users": anomalies}
 
-@app.post("/save_to_db")
-async def save_to_db(file: UploadFile = File(...)):
-    filename = file.filename.lower()
-    contents = await file.read()
-
-    if filename.endswith('.csv'):
-        df = pd.read_csv(io.StringIO(contents.decode('utf-8')))
-    elif filename.endswith('.json'):
-        data = json.loads(contents.decode('utf-8'))
-        # If the JSON is a list of records, convert to DataFrame
-        df = pd.DataFrame(data)
-    else:
-        raise HTTPException(status_code=400, detail="Only CSV or JSON files are supported")
-
-    records = df.to_dict(orient='records')
-    result = await collection.insert_many(records)
-    inserted_count = len(result.inserted_ids)
-
-    return {"message": f"Successfully inserted {inserted_count} records into MongoDB."}
 # ======== Main Entrypoint ========
 
 if __name__ == "__main__":

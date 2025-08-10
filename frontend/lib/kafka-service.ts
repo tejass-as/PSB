@@ -150,7 +150,7 @@ interface KafkaLogData {
         message = `Netflow detected from ${eventData?.SrcDevice} to ${eventData?.DstDevice}`;
       } 
       else {
-        message = `${kafkaData.data.topic} event + ${eventData?.path}`;
+        message = `${kafkaData.data.topic} ${eventData?.path}`;
       }
 
       return {
