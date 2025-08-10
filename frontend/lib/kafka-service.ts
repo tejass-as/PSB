@@ -168,13 +168,13 @@ interface KafkaLogData {
     private determineSeverity(kafkaData: KafkaLogData): "low" | "medium" | "high" | "critical" {
         const score = kafkaData.data?.anomaly_score ?? 0;
       
-        if (score >= 1.5) {
+        if (score >= 1) {
           return "critical";
         }
-        if (score >= 0.75) {
+        if (score >= 0.7) {
           return "high";
         }
-        if (score >= 0.6) {
+        if (score >= 0.45) {
           return "medium";
         }
         return "low";
