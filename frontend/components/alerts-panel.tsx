@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge"
 import type { LogEntry, ThreatAlert } from "@/lib/log-simulator"
 import { AlertTriangle, Shield, CheckCircle, Clock } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
+import { useState } from "react"
 
 interface AlertsPanelProps {
   threats: ThreatAlert[]
@@ -16,6 +17,9 @@ interface AlertsPanelProps {
 }
 
 export function AlertsPanel({ threats, onResolveAll, onResolveThreat, onThreatClick, logs }: AlertsPanelProps) {
+  const [comments, setComments] = useState<Record<string, string>>({})
+  const [inputValues, setInputValues] = useState<Record<string, string>>({})
+
   const getSeverityIcon = (severity: string) => {
     switch (severity) {
       case "critical":
@@ -124,8 +128,39 @@ export function AlertsPanel({ threats, onResolveAll, onResolveThreat, onThreatCl
                         <span>IP: {threat.ip}</span>
                         <span>{threat.timestamp.toLocaleTimeString()}</span>
                       </div>
+                      {/* Comment section */}
+                      <div className="mt-2">
+                        {/* Only show the comment if it exists */}
+                        {comments[threat.id] && (
+                          <div className="mb-1 text-xs text-slate-700 dark:text-slate-300 bg-slate-100 dark:bg-slate-700/40 rounded p-2">
+                            <span className="font-semibold">Comment:</span> {comments[threat.id]}
+                          </div>
+                        )}
+                        {/* Always show the input box */}
+                        <div className="flex gap-2">
+                          <input
+                            type="text"
+                            placeholder="Add a comment..."
+                            value={inputValues[threat.id] || ""}
+                            onChange={e =>
+                              setInputValues({ ...inputValues, [threat.id]: e.target.value })
+                            }
+                            className="flex-1 px-2 py-1 rounded border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-xs"
+                          />
+                          <button
+                            onClick={e => {
+                              e.stopPropagation()
+                              setComments({ ...comments, [threat.id]: inputValues[threat.id] || "" })
+                              setInputValues({ ...inputValues, [threat.id]: "" })
+                            }}
+                            className="px-2 py-1 bg-blue-600 hover:bg-blue-700 text-white rounded text-xs"
+                          >
+                            Comment
+                          </button>
+                        </div>
+                      </div>
                     </div>
-                  </div>
+                  </div>    
                   <motion.button
                     whileHover={{ scale: 1.1 }}
                     whileTap={{ scale: 0.9 }}

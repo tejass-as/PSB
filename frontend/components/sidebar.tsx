@@ -18,6 +18,7 @@ import {
   X,
   Clock,
   Check,
+  Database,
 } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
 
@@ -39,6 +40,7 @@ interface SidebarProps {
   onResolveThreat: (threatId: string) => void
   onExportLogs: () => void
   onClose: () => void
+  onSaveToDatabase: () => void
 }
 
 export function Sidebar({
@@ -102,8 +104,30 @@ export function Sidebar({
       color: "text-slate-600 dark:text-slate-400",
       bgColor: "bg-white/95 dark:bg-slate-800/95",
       borderColor: "border-slate-200 dark:border-slate-700",
-    },
-  ]
+    }]
+    const SaveToDatabase = async () => {
+    try {
+      const response = await fetch("http://127.0.0.1:8000/save_to_db", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ stats, threats }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const result = await response.json();
+      alert(result.message || "Data saved to database successfully!");
+    } catch (error) {
+      console.error("Error saving to database:", error);
+      alert("Failed to save data to database. Please ensure the FastAPI server is running and try again.");
+    }
+  }
+    
+  
 
   return (
     <motion.div
@@ -287,6 +311,18 @@ export function Sidebar({
 
               <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
                 <Button
+                  onClick={SaveToDatabase}
+                  variant="outline"
+                  className="w-full justify-start shadow-sm bg-white/80 dark:bg-slate-700/80 border-slate-200 dark:border-slate-600"
+                  size="sm"
+                >
+                  <Database className="h-4 w-4 mr-2" />
+                  Save to Database
+                </Button>
+              </motion.div>
+
+              <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
+                <Button
                   onClick={onReset}
                   variant="outline"
                   className="w-full justify-start shadow-sm border-slate-200 hover:bg-slate-50 dark:border-slate-600 dark:hover:bg-slate-700/20 bg-white/80 dark:bg-slate-700/80"
@@ -344,7 +380,7 @@ export function Sidebar({
                           </div>
                           <div className="text-xs text-red-600 dark:text-red-400 truncate">{threat.ip}</div>
                           <div className="text-xs text-slate-600 dark:text-slate-400">
-                            {threat.timestamp.toLocaleTimeString()}
+                            {new Date(threat.timestamp).toLocaleTimeString()}
                           </div>
                         </div>
                       </div>
@@ -389,7 +425,7 @@ export function Sidebar({
       <div className="p-4 border-t border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/50">
         <div className="flex items-center justify-between text-xs text-slate-600 dark:text-slate-400">
           <span>Last updated</span>
-          <motion.span key={Date.now()} initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+          <motion.span initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
             {new Date().toLocaleTimeString()}
           </motion.span>
         </div>
