@@ -11,9 +11,10 @@ interface AlertsPanelProps {
   threats: ThreatAlert[]
   onResolveAll: () => void
   onResolveThreat: (threatId: string) => void
+  onThreatClick: (threat: ThreatAlert) => void
 }
 
-export function AlertsPanel({ threats, onResolveAll, onResolveThreat }: AlertsPanelProps) {
+export function AlertsPanel({ threats, onResolveAll, onResolveThreat, onThreatClick }: AlertsPanelProps) {
   const getSeverityIcon = (severity: string) => {
     switch (severity) {
       case "critical":
@@ -44,10 +45,10 @@ export function AlertsPanel({ threats, onResolveAll, onResolveThreat }: AlertsPa
       <CardHeader className="pb-4">
         <div className="flex items-center justify-between">
           <div>
-                          <CardTitle className="text-xl font-semibold flex items-center">
-                <AlertTriangle className="h-5 w-5 mr-2 text-red-600" />
-                Threat Alerts
-              </CardTitle>
+            <CardTitle className="text-xl font-semibold flex items-center">
+              <AlertTriangle className="h-5 w-5 mr-2 text-red-600" />
+              Threat Alerts
+            </CardTitle>
             <CardDescription className="text-slate-600 dark:text-slate-400">
               Active security threats requiring attention
             </CardDescription>
@@ -77,7 +78,8 @@ export function AlertsPanel({ threats, onResolveAll, onResolveThreat }: AlertsPa
                 animate={{ opacity: 1, x: 0, scale: 1 }}
                 exit={{ opacity: 0, x: 20, scale: 0.95 }}
                 transition={{ delay: index * 0.1 }}
-                className={`p-4 rounded-xl border transition-all hover:shadow-lg ${getSeverityBg(threat.severity)}`}
+                className={`p-4 rounded-xl border transition-all hover:shadow-lg cursor-pointer ${getSeverityBg(threat.severity)}`}
+                onClick={() => onThreatClick(threat)}
               >
                 <div className="flex items-start justify-between">
                   <div className="flex items-start space-x-3 flex-1">
@@ -100,10 +102,10 @@ export function AlertsPanel({ threats, onResolveAll, onResolveThreat }: AlertsPa
                         <Badge
                           className={`text-xs animate-pulse ${
                             threat.severity === "critical"
-                                                        ? "bg-red-600 hover:bg-red-700"
-                          : threat.severity === "high"
-                            ? "bg-orange-600 hover:bg-orange-700"
-                            : threat.severity === "medium"
+                              ? "bg-red-600 hover:bg-red-700"
+                              : threat.severity === "high"
+                              ? "bg-orange-600 hover:bg-orange-700"
+                              : threat.severity === "medium"
                               ? "bg-yellow-600 hover:bg-yellow-700"
                               : "bg-blue-600 hover:bg-blue-700"
                           } text-white`}
@@ -112,6 +114,11 @@ export function AlertsPanel({ threats, onResolveAll, onResolveThreat }: AlertsPa
                         </Badge>
                       </div>
                       <p className="text-sm text-slate-600 dark:text-slate-400 mb-2">{threat.description}</p>
+                      {threat.explanation && (
+                        <p className="text-xs text-slate-600 dark:text-slate-400 italic mb-2 border-l-2 border-slate-300 dark:border-slate-600 pl-2">
+                          {threat.explanation}
+                        </p>
+                      )}
                       <div className="flex items-center justify-between text-xs text-slate-600 dark:text-slate-400">
                         <span>IP: {threat.ip}</span>
                         <span>{threat.timestamp.toLocaleTimeString()}</span>

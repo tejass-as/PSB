@@ -30,9 +30,8 @@ const Upload = () => {
 
       const formData = new FormData();
       formData.append("file", file);
-
       const res = await fetch(endpoint, { method: "POST", body: formData });
-
+      console.log(res);
       if (!res.ok) throw new Error(`Error ${res.status}: ${res.statusText}`);
 
       const data = await res.json();

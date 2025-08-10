@@ -71,6 +71,7 @@ export function Dashboard() {
     avgResponseTime: 0.8,
   });
   const [resolvedThreatIds, setResolvedThreatIds] = useState<string[]>([]);
+  const [selectedThreatExplanation, setSelectedThreatExplanation] = useState<string | null>(null);
 
   // Real-time Kafka data polling
   useEffect(() => {
@@ -93,7 +94,7 @@ export function Dashboard() {
       setStats((prev) => ({
         totalLogs: realTimeLogs.length,
         threatsDetected: realTimeThreats.length,
-        activeConnections: connected ? Math.floor(Math.random() * 50) + 100 : 0,
+        activeConnections: connected ? Math.floor(Math.random() * 2) + 10 : 0,
         systemHealth: connected ? Math.max(85, Math.min(99, prev.systemHealth + (Math.random() - 0.5) * 2)) : 0,
         resolvedThreats: prev.resolvedThreats,
         avgResponseTime: Math.max(0.1, Math.min(2.0, prev.avgResponseTime + (Math.random() - 0.5) * 0.1)),
@@ -217,6 +218,12 @@ export function Dashboard() {
 
   const updateSetting = (key: string, value: any) => {
     setSettings((prev) => ({ ...prev, [key]: value }));
+  };
+
+  const handleThreatClick = (threat: ThreatAlert) => {
+    setSelectedThreatExplanation(
+      `${threat.description}\n\nExplanation: ${threat.explanation || "No explanation"}`
+    );
   };
 
   return (
@@ -377,7 +384,7 @@ export function Dashboard() {
           >
             <Tabs
               value={activeTab}
-              onValueChange={setActiveTab}
+            onValueChange={setActiveTab}
               className="space-y-6"
             >
               <motion.div
@@ -450,11 +457,13 @@ export function Dashboard() {
                         threats={threats}
                         onResolveAll={resolveAllThreats}
                         onResolveThreat={resolveThreat}
+                        onThreatClick={handleThreatClick}
                       />
                       <div className="h-full">
                         <ThreatChatbot
                           threats={threats}
                           onResolveThreat={resolveThreat}
+                          value={selectedThreatExplanation}
                         />
                       </div>
                     </div>
@@ -718,4 +727,11 @@ export function Dashboard() {
       </AnimatePresence>
     </div>
   );
+}
+
+interface AlertsPanelProps {
+  threats: ThreatAlert[]
+  onResolveAll: () => void
+  onResolveThreat: (threatId: string) => void
+  onThreatClick: (threat: ThreatAlert) => void
 }

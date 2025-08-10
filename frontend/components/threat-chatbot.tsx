@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useRef, useEffect } from "react"
+import { useEffect, useState, useRef } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -22,9 +22,10 @@ interface ChatMessage {
 interface ThreatChatbotProps {
   threats: ThreatAlert[]
   onResolveThreat: (threatId: string) => void
+  value?: string // <-- add this
 }
 
-export function ThreatChatbot({ threats, onResolveThreat }: ThreatChatbotProps) {
+export function ThreatChatbot({ threats, onResolveThreat, value }: ThreatChatbotProps) {
   const [messages, setMessages] = useState<ChatMessage[]>([
     {
       id: "1",
@@ -35,6 +36,14 @@ export function ThreatChatbot({ threats, onResolveThreat }: ThreatChatbotProps) 
     }
   ])
   const [inputValue, setInputValue] = useState("")
+
+  // Add this effect:
+  useEffect(() => {
+    if (value) {
+      setInputValue(value)
+    }
+  }, [value])
+
   const [isTyping, setIsTyping] = useState(false)
   const chatContainerRef = useRef<HTMLDivElement>(null)
 
@@ -298,4 +307,4 @@ export function ThreatChatbot({ threats, onResolveThreat }: ThreatChatbotProps) 
       </CardContent>
     </Card>
   )
-} 
+}

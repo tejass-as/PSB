@@ -13,6 +13,7 @@ interface KafkaLogData {
       anomaly_score: number
       is_anomaly: boolean
       processing_timestamp: string
+      explanation: string
       data: {
         UserName: string
         EventID: string
@@ -48,6 +49,7 @@ interface KafkaLogData {
     message: string
     ip: string
     user: string
+    explanation: string
   }
   
   interface ThreatAlert {
@@ -57,6 +59,7 @@ interface KafkaLogData {
     severity: "low" | "medium" | "high" | "critical"
     description: string
     ip: string
+    explanation: string
   }
   
   export class KafkaService {
@@ -136,7 +139,8 @@ interface KafkaLogData {
       const source = eventData?.Source || kafkaData.data?.topic || 'unknown'
       const ip = eventData?.Destination || eventData?.Source || kafkaData.data?.time || '0.0.0.0'   
       const user = eventData?.SubjectUserName || eventData?.UserName || 'unknown'
-  
+      const explanation = kafkaData.data?.explanation || "No explanation";
+
       let message = '';
       if (kafkaData.data?.topic?.toLowerCase() === 'hostevent') {
         message = `Host Event from ${eventData?.DomainName}, Event ID: ${eventData?.EventID}`;
@@ -156,13 +160,14 @@ interface KafkaLogData {
         message,
         ip,
         user,
+        explanation,
       }
     }
   
     private determineSeverity(kafkaData: KafkaLogData): "low" | "medium" | "high" | "critical" {
         const score = kafkaData.data?.anomaly_score ?? 0;
       
-        if (score >= 1.3) {
+        if (score >= 1.7) {
           return "critical";
         }
         if (score >= 0.75) {
@@ -187,7 +192,7 @@ interface KafkaLogData {
         "exploit",
         "ransomware",
       ]
-      const isHighSeverity = log.severity === "high" || log.severity === "critical"
+      const isHighSeverity = log.severity === "high" || log.severity === "critical" || log.severity === "medium"
       const containsThreatKeyword = threatKeywords.some(keyword => log.message.toLowerCase().includes(keyword))
   
       if (isHighSeverity) {
@@ -211,6 +216,7 @@ interface KafkaLogData {
           severity: log.severity,
           description: `Detected ${threatTypes[detectedKeyword].toLowerCase()} from ${log.source} system targeting ${log.user}`,
           ip: log.ip,
+          explanation: log.explanation,
         }
       }
   

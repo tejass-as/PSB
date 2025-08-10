@@ -1,110 +1,137 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import type { LogEntry } from "@/lib/log-simulator"
-import { Search, Filter, Download, Eye, Clock, User, Globe, AlertTriangle, Shield, Activity } from "lucide-react"
-import { motion, AnimatePresence } from "framer-motion"
+import { useState } from "react";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import type { LogEntry } from "@/lib/log-simulator";
+import {
+  Search,
+  Filter,
+  Download,
+  Eye,
+  Clock,
+  User,
+  Globe,
+  AlertTriangle,
+  Shield,
+  Activity,
+} from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 
 interface LogTableProps {
-  logs: LogEntry[]
+  logs: LogEntry[];
 }
 
 export function LogTable({ logs }: LogTableProps) {
-  const [searchTerm, setSearchTerm] = useState("")
-  const [severityFilter, setSeverityFilter] = useState("all")
-  const [sourceFilter, setSourceFilter] = useState("all")
+  const [searchTerm, setSearchTerm] = useState("");
+  const [severityFilter, setSeverityFilter] = useState("all");
+  const [sourceFilter, setSourceFilter] = useState("all");
 
   const filteredLogs = logs.filter((log) => {
-    const matchesSearch = 
+    const matchesSearch =
       log.message.toLowerCase().includes(searchTerm.toLowerCase()) ||
       log.source.toLowerCase().includes(searchTerm.toLowerCase()) ||
       log.ip.includes(searchTerm) ||
-      log.user.toLowerCase().includes(searchTerm.toLowerCase())
-    
-    const matchesSeverity = severityFilter === "all" || log.severity === severityFilter
-    const matchesSource = sourceFilter === "all" || log.source === sourceFilter
-    
-    return matchesSearch && matchesSeverity && matchesSource
-  })
+      log.user.toLowerCase().includes(searchTerm.toLowerCase());
+
+    const matchesSeverity =
+      severityFilter === "all" || log.severity === severityFilter;
+    const matchesSource = sourceFilter === "all" || log.source === sourceFilter;
+
+    return matchesSearch && matchesSeverity && matchesSource;
+  });
 
   const getSeverityColor = (severity: string) => {
     switch (severity) {
       case "critical":
-        return "bg-red-600 text-white hover:bg-red-700"
+        return "bg-red-600 text-white hover:bg-red-700";
       case "high":
-        return "bg-orange-600 text-white hover:bg-orange-700"
+        return "bg-orange-600 text-white hover:bg-orange-700";
       case "medium":
-        return "bg-amber-600 text-white hover:bg-amber-700"
+        return "bg-amber-600 text-white hover:bg-amber-700";
       case "low":
-        return "bg-emerald-600 text-white hover:bg-emerald-700"
+        return "bg-emerald-600 text-white hover:bg-emerald-700";
       default:
-        return "bg-slate-600 text-white hover:bg-slate-700"
+        return "bg-slate-600 text-white hover:bg-slate-700";
     }
-  }
+  };
 
   const getSeverityIcon = (severity: string) => {
     switch (severity) {
       case "critical":
-        return <AlertTriangle className="h-3 w-3" />
+        return <AlertTriangle className="h-3 w-3" />;
       case "high":
-        return <Shield className="h-3 w-3" />
+        return <Shield className="h-3 w-3" />;
       case "medium":
-        return <Activity className="h-3 w-3" />
+        return <Activity className="h-3 w-3" />;
       case "low":
-        return <Eye className="h-3 w-3" />
+        return <Eye className="h-3 w-3" />;
       default:
-        return <Activity className="h-3 w-3" />
+        return <Activity className="h-3 w-3" />;
     }
-  }
+  };
 
   const getSeverityBg = (severity: string) => {
     switch (severity) {
       case "critical":
-        return "bg-red-50 dark:bg-red-950/20 border-red-200 dark:border-red-800 hover:bg-red-100 dark:hover:bg-red-950/30"
+        return "bg-red-50 dark:bg-red-950/20 border-red-200 dark:border-red-800 hover:bg-red-100 dark:hover:bg-red-950/30";
       case "high":
-        return "bg-orange-50 dark:bg-orange-950/20 border-orange-200 dark:border-orange-800 hover:bg-orange-100 dark:hover:bg-orange-950/30"
+        return "bg-orange-50 dark:bg-orange-950/20 border-orange-200 dark:border-orange-800 hover:bg-orange-100 dark:hover:bg-orange-950/30";
       case "medium":
-        return "bg-amber-50 dark:bg-amber-950/20 border-amber-200 dark:border-amber-800 hover:bg-amber-100 dark:hover:bg-amber-950/30"
+        return "bg-amber-50 dark:bg-amber-950/20 border-amber-200 dark:border-amber-800 hover:bg-amber-100 dark:hover:bg-amber-950/30";
       case "low":
-        return "bg-emerald-50 dark:bg-emerald-950/20 border-emerald-200 dark:border-emerald-800 hover:bg-emerald-100 dark:hover:bg-emerald-950/30"
+        return "bg-emerald-50 dark:bg-emerald-950/20 border-emerald-200 dark:border-emerald-800 hover:bg-emerald-100 dark:hover:bg-emerald-950/30";
       default:
-        return "bg-slate-50 dark:bg-slate-950/20 border-slate-200 dark:border-slate-800 hover:bg-slate-100 dark:hover:bg-slate-950/30"
+        return "bg-slate-50 dark:bg-slate-950/20 border-slate-200 dark:border-slate-800 hover:bg-slate-100 dark:hover:bg-slate-950/30";
     }
-  }
+  };
 
   const getTimeAgo = (timestamp: Date) => {
-    const now = new Date()
-    const diff = now.getTime() - timestamp.getTime()
-    const minutes = Math.floor(diff / 60000)
-    const hours = Math.floor(diff / 3600000)
-    const days = Math.floor(diff / 86400000)
+    const now = new Date();
+    const diff = now.getTime() - timestamp.getTime();
+    const minutes = Math.floor(diff / 60000);
+    const hours = Math.floor(diff / 3600000);
+    const days = Math.floor(diff / 86400000);
 
-    if (days > 0) return `${days}d ago`
-    if (hours > 0) return `${hours}h ago`
-    if (minutes > 0) return `${minutes}m ago`
-    return "Just now"
-  }
+    if (days > 0) return `${days}d ago`;
+    if (hours > 0) return `${hours}h ago`;
+    if (minutes > 0) return `${minutes}m ago`;
+    return "Just now";
+  };
 
   const exportLogs = () => {
-    const dataStr = JSON.stringify(filteredLogs, null, 2)
-    const dataUri = "data:application/json;charset=utf-8," + encodeURIComponent(dataStr)
-    const exportFileDefaultName = `security-logs-${new Date().toISOString().split("T")[0]}.json`
+    const dataStr = JSON.stringify(filteredLogs, null, 2);
+    const dataUri =
+      "data:application/json;charset=utf-8," + encodeURIComponent(dataStr);
+    const exportFileDefaultName = `security-logs-${
+      new Date().toISOString().split("T")[0]
+    }.json`;
 
-    const linkElement = document.createElement("a")
-    linkElement.setAttribute("href", dataUri)
-    linkElement.setAttribute("download", exportFileDefaultName)
-    linkElement.click()
-  }
+    const linkElement = document.createElement("a");
+    linkElement.setAttribute("href", dataUri);
+    linkElement.setAttribute("download", exportFileDefaultName);
+    linkElement.click();
+  };
 
   const sourceCounts = logs.reduce((acc, log) => {
-    acc[log.source] = (acc[log.source] || 0) + 1
-    return acc
-  }, {} as Record<string, number>)
+    acc[log.source] = (acc[log.source] || 0) + 1;
+    return acc;
+  }, {} as Record<string, number>);
 
   return (
     <Card className="h-full border border-slate-200 dark:border-slate-700 shadow-sm bg-white/95 dark:bg-slate-800/95 backdrop-blur-sm">
@@ -115,7 +142,9 @@ export function LogTable({ logs }: LogTableProps) {
               <Activity className="h-5 w-5 text-slate-600 dark:text-slate-400" />
               Security Logs
             </CardTitle>
-            <CardDescription>Real-time log monitoring and analysis with advanced filtering</CardDescription>
+            <CardDescription>
+              Real-time log monitoring and analysis with advanced filtering
+            </CardDescription>
           </div>
           <div className="flex flex-col sm:flex-row gap-3">
             <div className="relative">
@@ -152,7 +181,12 @@ export function LogTable({ logs }: LogTableProps) {
                 ))}
               </SelectContent>
             </Select>
-            <Button onClick={exportLogs} variant="outline" size="sm" className="shrink-0">
+            <Button
+              onClick={exportLogs}
+              variant="outline"
+              size="sm"
+              className="shrink-0"
+            >
               <Download className="h-4 w-4 mr-2" />
               Export
             </Button>
@@ -169,16 +203,25 @@ export function LogTable({ logs }: LogTableProps) {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -20 }}
                 transition={{ delay: index * 0.05 }}
-                className={`p-4 rounded-xl border transition-all hover:shadow-md ${getSeverityBg(log.severity)}`}
+                className={`p-4 rounded-xl border transition-all hover:shadow-md ${getSeverityBg(
+                  log.severity
+                )}`}
               >
                 <div className="flex items-start justify-between gap-4">
                   <div className="flex-1">
                     <div className="flex items-center gap-3 mb-3">
-                      <Badge className={`${getSeverityColor(log.severity)} flex items-center gap-1`}>
+                      <Badge
+                        className={`${getSeverityColor(
+                          log.severity
+                        )} flex items-center gap-1`}
+                      >
                         {getSeverityIcon(log.severity)}
                         {log.severity.toUpperCase()}
                       </Badge>
-                      <Badge variant="outline" className="text-xs bg-white/50 dark:bg-slate-800/50">
+                      <Badge
+                        variant="outline"
+                        className="text-xs bg-white/50 dark:bg-slate-800/50"
+                      >
                         {log.source}
                       </Badge>
                       <div className="flex items-center gap-1 text-xs text-slate-500 dark:text-slate-400">
@@ -186,7 +229,9 @@ export function LogTable({ logs }: LogTableProps) {
                         {getTimeAgo(log.timestamp)}
                       </div>
                     </div>
-                    <p className="text-sm font-medium mb-2 text-slate-900 dark:text-slate-100">{log.message}</p>
+                    <p className="text-sm font-medium mb-2 text-slate-900 dark:text-slate-100">
+                      {log.message}
+                    </p>
                     <div className="flex items-center gap-4 text-xs text-slate-500 dark:text-slate-400">
                       <div className="flex items-center gap-1">
                         <Globe className="h-3 w-3" />
@@ -211,11 +256,13 @@ export function LogTable({ logs }: LogTableProps) {
             >
               <Filter className="h-16 w-16 mx-auto mb-4 opacity-50" />
               <p className="text-lg font-medium mb-2">No logs found</p>
-              <p className="text-sm">Try adjusting your search criteria or filters</p>
+              <p className="text-sm">
+                Try adjusting your search criteria or filters
+              </p>
             </motion.div>
           )}
         </div>
       </CardContent>
     </Card>
-  )
+  );
 }

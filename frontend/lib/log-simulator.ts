@@ -6,6 +6,7 @@ export interface LogEntry {
   message: string
   ip: string
   user: string
+  explanation: string
 }
 
 export interface ThreatAlert {
@@ -15,6 +16,7 @@ export interface ThreatAlert {
   severity: "low" | "medium" | "high" | "critical"
   description: string
   ip: string
+  explanation: string
 }
 
 // ============================================================================
