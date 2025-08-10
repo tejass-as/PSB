@@ -120,19 +120,34 @@ export function AlertsPanel({
                         <h3 className="font-semibold text-sm text-slate-800 dark:text-slate-200">
                           {threat.source}
                         </h3>
-                        <Badge
-                          className={`text-xs animate-pulse ${
-                            threat.severity === "critical"
-                              ? "bg-red-600 hover:bg-red-700"
-                              : threat.severity === "high"
-                              ? "bg-orange-600 hover:bg-orange-700"
-                              : threat.severity === "medium"
-                              ? "bg-yellow-600 hover:bg-yellow-700"
-                              : "bg-blue-600 hover:bg-blue-700"
-                          } text-white`}
-                        >
-                          {threat.severity.toUpperCase()}
-                        </Badge>
+                        <div className="flex gap-2">
+                            <Badge
+                            className={`text-xs animate ${
+                                threat.severity === "critical"
+                                ? "bg-red-600 hover:bg-red-700"
+                                : threat.severity === "high"
+                                ? "bg-orange-600 hover:bg-orange-700"
+                                : threat.severity === "medium"
+                                ? "bg-yellow-600 hover:bg-yellow-700"
+                                : "bg-blue-600 hover:bg-blue-700"
+                            } text-white`}
+                            >
+                            {threat.threat_type}
+                            </Badge>
+                            <Badge
+                            className={`text-xs animate-pulse ${
+                                threat.severity === "critical"
+                                ? "bg-red-600 hover:bg-red-700"
+                                : threat.severity === "high"
+                                ? "bg-orange-600 hover:bg-orange-700"
+                                : threat.severity === "medium"
+                                ? "bg-yellow-600 hover:bg-yellow-700"
+                                : "bg-blue-600 hover:bg-blue-700"
+                            } text-white`}
+                            >
+                            {threat.severity.toUpperCase()}
+                            </Badge>
+                        </div>
                       </div>
                       <p className="text-sm text-slate-600 dark:text-slate-400 mb-2">
                         {threat.description}

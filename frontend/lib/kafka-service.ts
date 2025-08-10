@@ -14,6 +14,7 @@ interface KafkaLogData {
       is_anomaly: boolean
       processing_timestamp: string
       explanation: string
+      threat_type: string
       data: {
         UserName: string
         EventID: string
@@ -50,6 +51,7 @@ interface KafkaLogData {
     ip: string
     user: string
     explanation: string
+    threat_type: string
   }
   
   interface ThreatAlert {
@@ -61,6 +63,7 @@ interface KafkaLogData {
     ip: string
     explanation: string
     source: string
+    threat_type: string
   }
   
   export class KafkaService {
@@ -141,6 +144,7 @@ interface KafkaLogData {
       const ip = eventData?.Destination || eventData?.Source || kafkaData.data?.time || '0.0.0.0'   
       const user = eventData?.SubjectUserName || eventData?.UserName || 'unknown'
       const explanation = kafkaData.data?.explanation || "No explanation";
+      const threat_type = kafkaData.data?.threat_type
 
       let message = '';
       if (kafkaData.data?.topic?.toLowerCase() === 'hostevent') {
@@ -162,6 +166,7 @@ interface KafkaLogData {
         ip,
         user,
         explanation,
+        threat_type,
       }
     }
   
@@ -219,6 +224,7 @@ interface KafkaLogData {
           ip: log.ip,
           explanation: log.explanation,
           source: log.source,
+          threat_type: log.threat_type
         }
       }
   
