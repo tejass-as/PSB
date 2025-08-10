@@ -440,6 +440,72 @@ def classify_windows_threat(kafka_message):
         ])
 
 
+def classify_web_threat(kafka_message):
+    # Extract data from the Kafka message structure
+    data = kafka_message.get('data', {})
+    
+    # Extract string fields with safe access
+    method = str(data.get('method', '')).upper()
+    path = str(data.get('path', '')).lower()
+    body = str(data.get('body', '')).lower()
+
+    # Extract numeric fields with safe type conversion
+    try:
+        sq = float(data.get('single_q', 0))
+        dq = float(data.get('double_q', 0))
+        dash = float(data.get('dashes', 0))
+        braces = float(data.get('braces', 0))
+        spaces = float(data.get('spaces', 0))
+        pct = float(data.get('percentages', 0))
+        semi = float(data.get('semicolons', 0))
+        angle = float(data.get('angle_brackets', 0))
+        special = float(data.get('special_chars', 0))
+        path_len = float(data.get('path_length', 0))
+        body_len = float(data.get('body_length', 0))
+        badwords = float(data.get('badwords_count', 0))
+    except (ValueError, TypeError):
+        # If conversion fails, use default values
+        sq = dq = dash = braces = spaces = pct = semi = angle = special = path_len = body_len = badwords = 0
+
+    scores = {
+        "SQL Injection": 0,
+        "Cross-Site Scripting": 0,
+        "Command Injection": 0,
+        "Path Traversal": 0,
+        "Remote File Inclusion": 0,
+        "Drive-By Download": 0
+    }
+
+    # --- Method + pattern hints ---
+    if method == "POST" and ("select" in body or "union" in body or sq > 2):
+        scores["SQL Injection"] += 3
+    if angle > 0 and ("script" in body or "onerror" in body):
+        scores["Cross-Site Scripting"] += 3
+    if semi > 0 or (";wget" in body or ";curl" in body):
+        scores["Command Injection"] += 3
+    if ".." in path or dash > 4:
+        scores["Path Traversal"] += 3
+    if ("http://" in body or "https://" in body) and braces > 0:
+        scores["Remote File Inclusion"] += 3
+    if ("exe" in body or "payload" in body) and body_len > 500:
+        scores["Drive-By Download"] += 3
+
+    # --- Other patterns ---
+    if pct > 5 and badwords > 0:
+        scores["SQL Injection"] += 1
+        scores["Command Injection"] += 1
+    if spaces > 10 and special > 3:
+        scores["Command Injection"] += 1
+
+    # --- Variety balancing ---
+    if all(v == 0 for v in scores.values()):
+        scores[random.choice(list(scores.keys()))] = 1
+
+    max_score = max(scores.values())
+    max_types = [t for t, s in scores.items() if s == max_score]
+    return random.choice(max_types)
+
+
 def main():
     print("⚡ ENHANCED REAL-TIME ANOMALY DETECTION WITH SHAP EXPLANATIONS")
     print("="*80)
@@ -553,9 +619,11 @@ def main():
             
             threattype = "Unknown"
             if(message.value.get('topic') == "netflow"):
-                threattype = classify_threat_balanced(message.value.get('data', {}))
+                threattype = classify_threat_balanced(message.value)
             elif(message.value.get('topic') == "hostevent"):
                 threattype = classify_windows_threat(message.value)
+            elif(message.value.get('topic') == "webserver"):
+                threattype = classify_web_threat(message.value)
             # Extract data from message
             data = message.value.get('data', {})
             
