@@ -107,12 +107,13 @@ export function Sidebar({
     }]
     const SaveToDatabase = async () => {
     try {
+      const formData = new FormData();
+      const file = new File([JSON.stringify({ stats, threats })], "data.json", { type: "application/json" });
+      formData.append("file", file);
+
       const response = await fetch("http://127.0.0.1:8000/save_to_db", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ stats, threats }),
+        body: formData,
       });
 
       if (!response.ok) {

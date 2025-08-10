@@ -1,49 +1,61 @@
-"use client"
+"use client";
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { Badge } from "@/components/ui/badge"
-import type { LogEntry, ThreatAlert } from "@/lib/log-simulator"
-import { AlertTriangle, Shield, CheckCircle, Clock } from "lucide-react"
-import { motion, AnimatePresence } from "framer-motion"
-import { useState } from "react"
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import type { LogEntry, ThreatAlert } from "@/lib/log-simulator";
+import { AlertTriangle, Shield, CheckCircle, Clock } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { useState } from "react";
 
 interface AlertsPanelProps {
-  threats: ThreatAlert[]
-  onResolveAll: () => void
-  onResolveThreat: (threatId: string) => void
-  onThreatClick: (threat: ThreatAlert) => void
-  logs: LogEntry[]
+  threats: ThreatAlert[];
+  onResolveAll: () => void;
+  onResolveThreat: (threatId: string) => void;
+  onThreatClick: (threat: ThreatAlert) => void;
+  logs: LogEntry[];
 }
 
-export function AlertsPanel({ threats, onResolveAll, onResolveThreat, onThreatClick, logs }: AlertsPanelProps) {
-  const [comments, setComments] = useState<Record<string, string>>({})
-  const [inputValues, setInputValues] = useState<Record<string, string>>({})
+export function AlertsPanel({
+  threats,
+  onResolveAll,
+  onResolveThreat,
+  onThreatClick,
+  logs,
+}: AlertsPanelProps) {
+  const [comments, setComments] = useState<Record<string, string>>({});
+  const [inputValues, setInputValues] = useState<Record<string, string>>({});
 
   const getSeverityIcon = (severity: string) => {
     switch (severity) {
       case "critical":
       case "high":
-        return <AlertTriangle className="h-5 w-5 text-red-500" />
+        return <AlertTriangle className="h-5 w-5 text-red-500" />;
       case "medium":
-        return <Clock className="h-5 w-5 text-yellow-500" />
+        return <Clock className="h-5 w-5 text-yellow-500" />;
       default:
-        return <Shield className="h-5 w-5 text-blue-500" />
+        return <Shield className="h-5 w-5 text-blue-500" />;
     }
-  }
+  };
 
   const getSeverityBg = (severity: string) => {
     switch (severity) {
       case "critical":
-        return "bg-gradient-to-r from-red-50 to-red-100 dark:from-red-900/20 dark:to-red-800/20 border-red-200 dark:border-red-700"
+        return "bg-gradient-to-r from-red-50 to-red-100 dark:from-red-900/20 dark:to-red-800/20 border-red-200 dark:border-red-700";
       case "high":
-        return "bg-gradient-to-r from-orange-50 to-orange-100 dark:from-orange-900/20 dark:to-orange-800/20 border-orange-200 dark:border-orange-700"
+        return "bg-gradient-to-r from-orange-50 to-orange-100 dark:from-orange-900/20 dark:to-orange-800/20 border-orange-200 dark:border-orange-700";
       case "medium":
-        return "bg-gradient-to-r from-yellow-50 to-yellow-100 dark:from-yellow-900/20 dark:to-yellow-800/20 border-yellow-200 dark:border-yellow-700"
+        return "bg-gradient-to-r from-yellow-50 to-yellow-100 dark:from-yellow-900/20 dark:to-yellow-800/20 border-yellow-200 dark:border-yellow-700";
       default:
-        return "bg-gradient-to-r from-blue-50 to-blue-100 dark:from-blue-900/20 dark:to-blue-800/20 border-blue-200 dark:border-blue-700"
+        return "bg-gradient-to-r from-blue-50 to-blue-100 dark:from-blue-900/20 dark:to-blue-800/20 border-blue-200 dark:border-blue-700";
     }
-  }
+  };
 
   return (
     <Card className="border border-slate-200 dark:border-slate-700 shadow-sm bg-white/95 dark:bg-slate-800/95 backdrop-blur-sm">
@@ -83,7 +95,9 @@ export function AlertsPanel({ threats, onResolveAll, onResolveThreat, onThreatCl
                 animate={{ opacity: 1, x: 0, scale: 1 }}
                 exit={{ opacity: 0, x: 20, scale: 0.95 }}
                 transition={{ delay: index * 0.1 }}
-                className={`p-4 rounded-xl border transition-all hover:shadow-lg cursor-pointer ${getSeverityBg(threat.severity)}`}
+                className={`p-4 rounded-xl border transition-all hover:shadow-lg cursor-pointer ${getSeverityBg(
+                  threat.severity
+                )}`}
                 onClick={() => onThreatClick(threat)}
               >
                 <div className="flex items-start justify-between">
@@ -103,7 +117,9 @@ export function AlertsPanel({ threats, onResolveAll, onResolveThreat, onThreatCl
                     </motion.div>
                     <div className="flex-1">
                       <div className="flex items-center justify-between mb-2">
-                        <h3 className="font-semibold text-sm text-slate-800 dark:text-slate-200">{threat.source}</h3>
+                        <h3 className="font-semibold text-sm text-slate-800 dark:text-slate-200">
+                          {threat.source}
+                        </h3>
                         <Badge
                           className={`text-xs animate-pulse ${
                             threat.severity === "critical"
@@ -118,7 +134,9 @@ export function AlertsPanel({ threats, onResolveAll, onResolveThreat, onThreatCl
                           {threat.severity.toUpperCase()}
                         </Badge>
                       </div>
-                      <p className="text-sm text-slate-600 dark:text-slate-400 mb-2">{threat.description}</p>
+                      <p className="text-sm text-slate-600 dark:text-slate-400 mb-2">
+                        {threat.description}
+                      </p>
                       {threat.explanation && (
                         <p className="text-xs text-slate-600 dark:text-slate-400 italic mb-2 border-l-2 border-slate-300 dark:border-slate-600 pl-2">
                           {threat.explanation}
@@ -133,7 +151,8 @@ export function AlertsPanel({ threats, onResolveAll, onResolveThreat, onThreatCl
                         {/* Only show the comment if it exists */}
                         {comments[threat.id] && (
                           <div className="mb-1 text-xs text-slate-700 dark:text-slate-300 bg-slate-100 dark:bg-slate-700/40 rounded p-2">
-                            <span className="font-semibold">Comment:</span> {comments[threat.id]}
+                            <span className="font-semibold">Comment:</span>{" "}
+                            {comments[threat.id]}
                           </div>
                         )}
                         {/* Always show the input box */}
@@ -142,25 +161,42 @@ export function AlertsPanel({ threats, onResolveAll, onResolveThreat, onThreatCl
                             type="text"
                             placeholder="Add a comment..."
                             value={inputValues[threat.id] || ""}
-                            onChange={e =>
-                              setInputValues({ ...inputValues, [threat.id]: e.target.value })
+                            onChange={(e) =>
+                              setInputValues({
+                                ...inputValues,
+                                [threat.id]: e.target.value,
+                              })
                             }
                             className="flex-1 px-2 py-1 rounded border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-xs"
                           />
                           <button
-                            onClick={e => {
-                              e.stopPropagation()
-                              setComments({ ...comments, [threat.id]: inputValues[threat.id] || "" })
-                              setInputValues({ ...inputValues, [threat.id]: "" })
+                            onClick={(e) => {   
+                              e.stopPropagation();
+                              setComments({
+                                ...comments,
+                                [threat.id]: inputValues[threat.id] || "",
+                              });
+                              setInputValues({
+                                ...inputValues,
+                                [threat.id]: "",
+                              });
                             }}
-                            className="px-2 py-1 bg-blue-600 hover:bg-blue-700 text-white rounded text-xs"
+                            className={`px-2 py-1 ${
+                              threat.severity === "critical"
+                                ? "bg-red-600 hover:bg-red-700"
+                                : threat.severity === "high"
+                                ? "bg-orange-600 hover:bg-orange-700"
+                                : threat.severity === "medium"
+                                ? "bg-yellow-600 hover:bg-yellow-700"
+                                : "bg-blue-600 hover:bg-blue-700"
+                            } text-white rounded text-xs`}
                           >
                             Comment
                           </button>
                         </div>
                       </div>
                     </div>
-                  </div>    
+                  </div>
                   <motion.button
                     whileHover={{ scale: 1.1 }}
                     whileTap={{ scale: 0.9 }}
@@ -193,12 +229,16 @@ export function AlertsPanel({ threats, onResolveAll, onResolveThreat, onThreatCl
               >
                 <Shield className="h-16 w-16 mx-auto mb-4 text-green-500" />
               </motion.div>
-              <h3 className="text-lg font-semibold text-green-600 dark:text-green-400 mb-2">All Clear!</h3>
-              <p className="text-slate-600 dark:text-slate-400">No active threats detected</p>
+              <h3 className="text-lg font-semibold text-green-600 dark:text-green-400 mb-2">
+                All Clear!
+              </h3>
+              <p className="text-slate-600 dark:text-slate-400">
+                No active threats detected
+              </p>
             </motion.div>
           )}
         </div>
       </CardContent>
     </Card>
-  )
+  );
 }
