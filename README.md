@@ -1,4 +1,4 @@
-# Proactive Cybersecurity with AI-Enhanced Log Analysis
+# Proactive Cybersecurity with AI Log Analysis
 
 A modern, AI-powered security dashboard for real-time threat detection and response.
 
